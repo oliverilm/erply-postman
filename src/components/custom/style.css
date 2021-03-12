@@ -1,0 +1,74 @@
+button {
+    transition: all 150ms linear;
+    
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+button:focus {
+    outline: none;
+    box-shadow: 4px 4px 4px 4px #ccc;
+}
+
+.primary:hover,
+.secondary:hover,
+.error:hover,
+.success:hover,
+.info:hover {
+    transition: all 150ms linear;
+}
+
+
+.primary {
+    border: 1px solid #16a085;
+    color: #16a085;
+}
+.primary:hover {
+    background-color: #16a085;
+    color: white;
+}
+
+.secondary {
+    border: 1px solid #2980b9;
+    color: #2980b9;
+}
+.secondary:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+
+.error {
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+.error:hover {
+    background-color: #e74c3c;
+    color: white;
+}
+
+
+.success {
+    border: 1px solid #27ae60;
+    color: #27ae60;
+}
+.success:hover {
+    background-color: #27ae60;
+    color: white;
+}
+
+
+.info {
+    border: 1px solid #f1c40f;
+    color: #f1c40f;
+}
+.info:hover {
+    background-color: #f1c40f;
+    color: black;
+}

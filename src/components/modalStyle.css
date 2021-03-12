@@ -1,0 +1,28 @@
+/* .user-card:hover  .user-card-session {
+    transition: all .3s linear;
+
+    color: #303030 !important;
+} */
+.user-card {
+    cursor: pointer;
+}
+.selected {
+    border: 1px solid #27ae60 !important;
+}
+
+/* .user-card:hover {
+    transition: all .3s linear;
+    background-color: #ecf0f1;
+    border-color: #2c3e50;
+} */
+
+.user-card-detail {
+    color: #303030 !important; 
+    margin-bottom: .4em;
+}
+
+.user-card-session {
+    font-size: 10px !important; 
+    margin-top: .4em;
+}
+
