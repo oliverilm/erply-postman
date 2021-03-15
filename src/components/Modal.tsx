@@ -1,9 +1,4 @@
-import React, {
-	ChangeEventHandler,
-	useContext,
-	useEffect,
-	useState,
-} from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { useTransition, animated } from 'react-spring';
 
@@ -37,9 +32,7 @@ const Modal: React.FC = () => {
 	const [clientCode, setClientCode] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [userName, setUserName] = useState<string>('');
-	const { usersList, setUsersList, setSelectedUser, selectedUser } = useContext(
-		UsersListContext
-	);
+	const { usersList, addUser } = useContext(UsersListContext);
 
 	const transitions = useTransition(open, null, {
 		from: {
@@ -57,25 +50,22 @@ const Modal: React.FC = () => {
 		},
 	});
 
-	const addUser = () => {
-		const newUser: UserI = {
-			selected: true,
-			username: userName,
-			password,
-			sessionKey: null,
-			clientCode,
-			credentials: {},
-		};
+	const isValid = clientCode && userName && password;
 
-		const newUsersList = [
-			newUser,
-			...usersList.map((user) => {
-				user.selected = false;
-				return user;
-			}),
-		];
-
-		setUsersList(newUsersList);
+	const addNewUser = () => {
+		if (clientCode && userName && password) {
+			const newUser: UserI = {
+				id: usersList.length,
+				selected: true,
+				username: userName,
+				password,
+				sessionKey: null,
+				clientCode,
+				lastLogin: 0,
+				credentials: null,
+			};
+			addUser(newUser);
+		}
 	};
 
 	const changeUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -121,7 +111,7 @@ const Modal: React.FC = () => {
 										placeholder="username"
 									/>
 									<Input
-										type="text"
+										type="password"
 										onChange={changePassword}
 										placeholder="password"
 									/>
@@ -129,7 +119,8 @@ const Modal: React.FC = () => {
 										icon={AddIcon}
 										style={{ marginLeft: '1em', padding: 0 }}
 										variant="primary"
-										onClick={addUser}
+										onClick={addNewUser}
+										disabled={!isValid}
 									></Button>
 								</Card>
 							</animated.div>

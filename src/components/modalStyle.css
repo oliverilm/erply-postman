@@ -7,7 +7,14 @@
     cursor: pointer;
 }
 .selected {
-    border: 1px solid #27ae60 !important;
+    border-color: #27ae60;
+    background-color: #27ae60;
+    font-weight: bolder;
+    color: #fff;
+}
+
+.selected div {
+    color: #fff;
 }
 
 /* .user-card:hover {

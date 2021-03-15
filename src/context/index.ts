@@ -1,14 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { UserI } from '../@interfaces';
-import { defaultUser } from '../api/user';
 
-export const UsersListContext = React.createContext({
-	usersList: [defaultUser],
-	selectedUser: defaultUser,
+interface UserContext {
+	usersList: UserI[];
+	selectedUser: UserI | null | undefined;
+	setUsersList: (arr: UserI[]) => any;
+	setSelectedUser: (user: UserI) => any;
+	addUser: (user: UserI) => any;
+	updateUser: (user: UserI) => any;
+}
+
+export const UsersListContext = React.createContext<UserContext>({
+	usersList: [],
+	selectedUser: null,
 	setUsersList: (value: UserI[]) => {
 		return;
 	},
 	setSelectedUser: (value: UserI) => {
+		return;
+	},
+	addUser: (user: UserI) => {
+		return;
+	},
+	updateUser: (user: UserI) => {
 		return;
 	},
 });

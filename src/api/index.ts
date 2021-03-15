@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserI } from '../@interfaces';
+import { BaseRequestResponse, CredentialsI, UserI } from '../@interfaces';
 
 axios.interceptors.request.use((request) => {
 	const formData = new FormData();
@@ -25,7 +25,11 @@ const spreadUser = (user: UserI) => {
 };
 
 export default {
-	verifyUser: ({ sessionKey, clientCode, username, password }: UserI) => {
+	verifyUser: ({
+		clientCode,
+		username,
+		password,
+	}: UserI): Promise<BaseRequestResponse<CredentialsI>> => {
 		const body = {
 			request: 'verifyUser',
 			clientCode,

@@ -6,8 +6,10 @@ import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context/index';
 import Modal from './Modal';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import api from '../api/index';
 import './modalStyle.css';
+import UserManager from '../api/user';
+import { Menu, MenuItem } from '@material-ui/core';
+import BlockIcon from '@material-ui/icons/Block';
 
 const ListCard = styled.div`
 	border-radius: 5px;
@@ -37,32 +39,68 @@ interface ListItemProps {
 	user: UserI;
 }
 
+interface TimeI {
+	hours: number;
+	minutes: number;
+	seconds: number;
+}
+
 const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const { clientCode, username, sessionKey, selected } = user;
-	const [hover, setHover] = useState(false);
-	const { setSelectedUser } = useContext(UsersListContext);
+	const { setSelectedUser, updateUser } = useContext(UsersListContext);
+	const userManager = new UserManager(user);
+	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 
-	// TODO: Style this and make the user selection work.
+	useEffect(() => {
+		setInterval(() => {
+			setTimeTilEnd(timeUntilAuthEnd());
+		}, 1000);
+	}, []);
+
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
 	const selectUser = () => {
 		setSelectedUser(user);
 	};
 
-	const login = () => {
-		api.verifyUser(user).then((res) => {
-			console.log(res);
-		});
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
+	const isAuthenticated = () => {
+		return userManager.isAuthenticated();
+	};
+
+	const timeUntilAuthEnd = () => {
+		const endDate = userManager.authEndTime();
+		const currentDate = new Date();
+		if (endDate) {
+			const distance = endDate.getTime() - currentDate.getTime();
+			const hours = Math.floor(
+				(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+			);
+			const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			return { hours, minutes, seconds };
+		}
+		return null;
+	};
+
+	const login = async () => {
+		const updatedUser = await userManager.login();
+		updateUser(updatedUser);
 	};
 
 	return (
 		<ListCard
 			className={`user-card ${selected ? 'selected' : ''}`}
 			onDoubleClick={selectUser}
-			onMouseEnter={() => {
-				setHover(true);
-			}}
-			onMouseLeave={() => {
-				setHover(false);
-			}}
+			title={JSON.stringify(timeTilEnd)}
 		>
 			<ListCardContent>
 				<ListCardRow className={'user-card-detail'}>
@@ -70,31 +108,60 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						{clientCode} - {username}
 					</div>
 					<div>
-						<VpnKeyIcon style={{ color: '#333' }} onClick={login} />
+						{isAuthenticated() ? (
+							<VpnKeyIcon color="primary" onClick={login} />
+						) : (
+							<BlockIcon color="error" />
+						)}
 					</div>
 				</ListCardRow>
 				<ListCardRow className={'user-card-session'}>
-					{sessionKey || 'XXXXXXXXXXXXXXX'}
+					<div>{sessionKey ?? 'xxxxxxxxxxxxxxx'}</div>
+					<div
+						aria-controls="simple-menu"
+						aria-haspopup="true"
+						onClick={handleClick}
+					>
+						options &gt;
+					</div>
+					<Menu
+						id="simple-menu"
+						anchorEl={anchorEl}
+						keepMounted
+						open={Boolean(anchorEl)}
+						onClose={handleClose}
+					>
+						<MenuItem
+							onClick={() => {
+								handleClose();
+								login();
+							}}
+						>
+							Authenticate
+						</MenuItem>
+						<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+						<MenuItem onClick={handleClose}>View Details</MenuItem>
+						<MenuItem onClick={handleClose}>Delete</MenuItem>
+					</Menu>
 				</ListCardRow>
 			</ListCardContent>
 		</ListCard>
 	);
 };
 
-export const UserList: React.FC = () => {
-	const context = useContext(UsersListContext);
-	const { usersList } = context;
+interface UserListProps {
+	userList: UserI[];
+}
 
+export const UserList: React.FC<UserListProps> = ({ userList }) => {
 	return (
 		<div style={{ width: '430px', padding: '1em' }}>
 			<div style={{ marginBottom: '2em' }}>
 				<Modal />
 			</div>
-			{usersList
-				.filter((user) => !user.selected)
-				.map((user, index) => (
-					<UserListItem key={index} user={user} />
-				))}
+			{userList.map((user, index) => (
+				<UserListItem key={index} user={user} />
+			))}
 		</div>
 	);
 };
