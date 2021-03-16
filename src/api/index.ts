@@ -24,6 +24,14 @@ const spreadUser = (user: UserI) => {
 	return { sessionKey, clientCode, username, password };
 };
 
+interface BaseGeneric {
+	user: UserI;
+	request: string;
+}
+interface GenericRequestI extends BaseGeneric {
+	[key: string]: string | number | any;
+}
+
 export default {
 	verifyUser: ({
 		clientCode,
@@ -37,5 +45,18 @@ export default {
 			password,
 		};
 		return axios.post(`https://${clientCode}.erply.com/api/`, body);
+	},
+
+	generic: (body: GenericRequestI): Promise<BaseRequestResponse<any>> => {
+		const { user, ...rest } = body;
+		const completeBody = {
+			sessionKey: user.credentials?.sessionKey,
+			clientCode: user.clientCode,
+			...rest,
+		};
+		return axios.post(
+			`https://${user.clientCode}.erply.com/api/`,
+			completeBody
+		);
 	},
 };

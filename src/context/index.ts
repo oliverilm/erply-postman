@@ -10,6 +10,19 @@ interface UserContext {
 	setSelectedUser: (user: UserI) => any;
 	addUser: (user: UserI) => any;
 	updateUser: (user: UserI) => any;
+	deleteUser: (user: UserI) => any;
+}
+
+interface ResponseI {
+	request: string;
+	time: number;
+	response: any;
+	error: boolean;
+}
+interface ResponseContextI {
+	responses: ResponseI[];
+	setResponses: (arr: ResponseI[]) => any;
+	addResponse: (res: ResponseI) => any;
 }
 
 export const UsersListContext = React.createContext<UserContext>({
@@ -27,11 +40,24 @@ export const UsersListContext = React.createContext<UserContext>({
 	updateUser: (user: UserI) => {
 		return;
 	},
+	deleteUser: (user: UserI) => {
+		return;
+	},
 });
 
 export const StorageContext = React.createContext({
 	storage: null,
 	setStorage: () => {
+		return;
+	},
+});
+
+export const ResponseContext = React.createContext<ResponseContextI>({
+	responses: [],
+	setResponses: (arr: ResponseI[]) => {
+		return;
+	},
+	addResponse: (res: ResponseI) => {
 		return;
 	},
 });

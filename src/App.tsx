@@ -6,6 +6,14 @@ import { UserI } from './@interfaces';
 import PluginStorage from './api/storage';
 import { UserList } from './components/UserList';
 import { UsersListContext } from './context/index';
+import RequestList from './components/requests/RequestList';
+import styled from 'styled-components';
+
+const Row = styled.div`
+	display: flex;
+	flex: 1;
+	flex-direction: 'row';
+`;
 
 const App: React.FC = () => {
 	const [usersList, setUsersList] = useState<UserI[]>(PluginStorage.getUsers());
@@ -43,12 +51,17 @@ const App: React.FC = () => {
 	};
 
 	const updateUser = (user: UserI) => {
-		const oldList = usersList;
-
-		const result = oldList.map(
+		const result = usersList.map(
 			(obj) => [user].find((o) => o.id === obj.id) || obj
 		);
 		PluginStorage.setUsers(result);
+		setUsersList(PluginStorage.getUsers());
+	};
+
+	const deleteUser = (user: UserI) => {
+		const newList = usersList.filter((u) => u.id !== user.id);
+
+		PluginStorage.setUsers(newList);
 		setUsersList(PluginStorage.getUsers());
 	};
 
@@ -61,9 +74,13 @@ const App: React.FC = () => {
 				setSelectedUser: selectUser,
 				addUser,
 				updateUser,
+				deleteUser,
 			}}
 		>
-			<UserList userList={usersList} />
+			<Row>
+				<UserList userList={usersList} />
+				<RequestList />
+			</Row>
 		</UsersListContext.Provider>
 	);
 };

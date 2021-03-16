@@ -46,15 +46,21 @@ interface TimeI {
 }
 
 const UserListItem: React.FC<ListItemProps> = ({ user }) => {
-	const { clientCode, username, sessionKey, selected } = user;
-	const { setSelectedUser, updateUser } = useContext(UsersListContext);
+	const { clientCode, username, selected } = user;
+	const { setSelectedUser, updateUser, deleteUser } = useContext(
+		UsersListContext
+	);
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 
 	useEffect(() => {
-		setInterval(() => {
-			setTimeTilEnd(timeUntilAuthEnd());
-		}, 1000);
+		if (user.credentials !== null) {
+			setInterval(() => {
+				setTimeTilEnd(timeUntilAuthEnd());
+			}, 1000);
+		} else {
+			updateUser({ ...user, credentials: null });
+		}
 	}, []);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -75,6 +81,11 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 		return userManager.isAuthenticated();
 	};
 
+	const deleteThisUser = () => {
+		handleClose();
+		deleteUser(user);
+	};
+
 	const timeUntilAuthEnd = () => {
 		const endDate = userManager.authEndTime();
 		const currentDate = new Date();
@@ -92,15 +103,20 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	};
 
 	const login = async () => {
+		handleClose();
 		const updatedUser = await userManager.login();
 		updateUser(updatedUser);
+	};
+
+	const formatNr = (nr: number | undefined) => {
+		if (nr === undefined) return ' -- ';
+		return (nr ?? 0).toString().padStart(2, '0');
 	};
 
 	return (
 		<ListCard
 			className={`user-card ${selected ? 'selected' : ''}`}
 			onDoubleClick={selectUser}
-			title={JSON.stringify(timeTilEnd)}
 		>
 			<ListCardContent>
 				<ListCardRow className={'user-card-detail'}>
@@ -109,14 +125,18 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 					</div>
 					<div>
 						{isAuthenticated() ? (
-							<VpnKeyIcon color="primary" onClick={login} />
+							<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
+								timeTilEnd?.minutes
+							)}:${formatNr(timeTilEnd?.seconds)}`}</div>
 						) : (
 							<BlockIcon color="error" />
 						)}
 					</div>
 				</ListCardRow>
 				<ListCardRow className={'user-card-session'}>
-					<div>{sessionKey ?? 'xxxxxxxxxxxxxxx'}</div>
+					<div>
+						{user.credentials?.sessionKey.substr(0, 15) ?? 'xxxxxxxxxxxxxxx'}
+					</div>
 					<div
 						aria-controls="simple-menu"
 						aria-haspopup="true"
@@ -131,17 +151,10 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						open={Boolean(anchorEl)}
 						onClose={handleClose}
 					>
-						<MenuItem
-							onClick={() => {
-								handleClose();
-								login();
-							}}
-						>
-							Authenticate
-						</MenuItem>
+						<MenuItem onClick={login}>Authenticate</MenuItem>
 						<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
 						<MenuItem onClick={handleClose}>View Details</MenuItem>
-						<MenuItem onClick={handleClose}>Delete</MenuItem>
+						<MenuItem onClick={deleteThisUser}>Delete</MenuItem>
 					</Menu>
 				</ListCardRow>
 			</ListCardContent>
