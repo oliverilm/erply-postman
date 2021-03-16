@@ -14,6 +14,7 @@ interface UserContext {
 }
 
 interface ResponseI {
+	user: UserI;
 	request: string;
 	time: number;
 	response: any;

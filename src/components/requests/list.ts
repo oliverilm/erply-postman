@@ -1,7 +1,7 @@
 export interface RequestContent {
 	name: string;
 	required: boolean;
-	type: string;
+	type: 'string' | 'number';
 	helper?: string;
 }
 
@@ -25,5 +25,17 @@ export const requests: RequestI[] = [
 		request: 'getConfParameters',
 		title: 'Get Config Parameters',
 		fields: [],
+	},
+
+	{
+		request: 'getEmployees',
+		title: 'get a specific or a list of employees',
+		fields: [
+			{ name: 'employeeID', required: false, type: 'number' },
+			{ name: 'searchName', required: false, type: 'string' },
+			{ name: 'userGroupID', required: false, type: 'number' },
+			{ name: 'usernameOrEmail', required: false, type: 'number' },
+			{ name: 'warehouseID', required: false, type: 'number' },
+		],
 	},
 ];

@@ -18,12 +18,6 @@ axios.interceptors.response.use((response) => {
 	return response;
 });
 
-const spreadUser = (user: UserI) => {
-	const { sessionKey, clientCode, username, password } = user;
-
-	return { sessionKey, clientCode, username, password };
-};
-
 interface BaseGeneric {
 	user: UserI;
 	request: string;
@@ -52,6 +46,8 @@ export default {
 		const completeBody = {
 			sessionKey: user.credentials?.sessionKey,
 			clientCode: user.clientCode,
+			recordsOnPage: 100,
+			pageNo: 1,
 			...rest,
 		};
 		return axios.post(
