@@ -3,19 +3,17 @@ import styled from 'styled-components';
 import { requests as requestList } from './list';
 import Request from './Request';
 
-const Main = styled.div`
-	margin-top: 4%;
-	width: 100%;
+const Col = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
 
-const RowWrap = styled.div`
+const Row = styled.div`
 	margin-top: 1em;
 	display: flex;
 	flex-direction: row;
 	flex: 1;
-	flex-wrap: wrap;
+	min-height: 100%;
 `;
 
 const Input = styled.input`
@@ -25,6 +23,17 @@ const Input = styled.input`
 	letter-spacing: 2px;
 	margin: 0.1em;
 	width: 300px;
+`;
+
+const Responses = styled.div`
+	background-color: #34495e;
+	width: 100%;
+	min-height: 90vh;
+	max-height: 90vh;
+	margin: 1.5em;
+	color: white;
+	padding: 1em;
+	overflow-y: scroll;
 `;
 
 const RequestList = (): JSX.Element => {
@@ -45,15 +54,18 @@ const RequestList = (): JSX.Element => {
 	};
 
 	return (
-		<Main>
-			<div>
-				<Input type="text" placeholder="search..." onChange={search} />
-			</div>
-			<RowWrap>
+		<Row>
+			<Col style={{ marginTop: '2em' }}>
+				<div>
+					<Input type="text" placeholder="search..." onChange={search} />
+				</div>
 				<div style={{ minWidth: 500 }}>{renderRequests()}</div>
-				<div></div>
-			</RowWrap>
-		</Main>
+			</Col>
+
+			<Responses>
+				{<pre>{JSON.stringify({ test: 'test' }, null, 2)}</pre>}
+			</Responses>
+		</Row>
 	);
 };
 
