@@ -5,7 +5,6 @@ import { useTransition, animated } from 'react-spring';
 import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context/index';
 import { Button } from './custom/Button';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 
 const Input = styled.input`
@@ -87,10 +86,9 @@ const Modal: React.FC = () => {
 	return (
 		<div>
 			<Button
-				icon={CheckCircleOutlineIcon}
-				iconPlacement="left"
 				variant={'primary'}
 				onClick={toggleModal}
+				style={{ width: '100%' }}
 			>
 				Add user
 			</Button>

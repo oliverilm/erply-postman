@@ -14,7 +14,7 @@ const ListCard = styled.div`
 	border-radius: 5px;
 	border: 1px solid #ccc;
 	margin: 0.5em 0.25em;
-	min-height: 3em;
+	min-height: 4em;
 	width: 14em;
 `;
 
@@ -167,8 +167,8 @@ interface UserListProps {
 
 export const UserList: React.FC<UserListProps> = ({ userList }) => {
 	return (
-		<div style={{ width: '430px', padding: '1em' }}>
-			<div style={{ marginBottom: '2em' }}>
+		<div style={{ padding: '1em' }}>
+			<div style={{ margin: '1em 0px', width: '100%' }}>
 				<Modal />
 			</div>
 			{userList.map((user, index) => (

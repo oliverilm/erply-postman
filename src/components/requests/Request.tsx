@@ -70,6 +70,7 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 						<>
 							<InputLabel id={`${name}-label`}>{name}</InputLabel>
 							<Select
+								style={{ width: 300 }}
 								labelId={`${name}-label`}
 								id={`${name}-select`}
 								value={params[name]} // TODO: fix this
@@ -91,6 +92,7 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 							label={name}
 							required={required}
 							type={type}
+							style={{ width: 300 }}
 							onChange={(e) => {
 								change(name, e);
 							}}
