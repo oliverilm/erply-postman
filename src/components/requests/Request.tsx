@@ -52,10 +52,10 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 	const { usersList } = useContext(UsersListContext);
 	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
-	const change = (name: string, e: any) => {
-		const value = e?.target?.value ?? '';
+	const change = (name: string, value: string | unknown) => {
 		const tempParams = params;
-		tempParams[name] = value;
+		tempParams[name] =
+			typeof value === 'string' || typeof value === 'number' ? value : ''; // TODO: seems wrong
 
 		setParams(tempParams);
 	};
@@ -74,7 +74,7 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 								id={`${name}-select`}
 								value={params[name]} // TODO: fix this
 								onChange={(e) => {
-									change(name, e);
+									change(name, e.target.value);
 								}}
 							>
 								<MenuItem value={undefined}></MenuItem>
