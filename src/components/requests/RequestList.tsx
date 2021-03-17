@@ -43,9 +43,11 @@ const RequestList = (): JSX.Element => {
 			<div
 				style={{
 					minWidth: 500,
-					minHeight: '90vh',
-					maxHeight: '90vh',
+					minHeight: '89vh',
+					maxHeight: '89vh',
 					overflowY: 'scroll',
+					overflowX: 'hidden',
+					marginTop: 10,
 				}}
 			>
 				{renderRequests()}

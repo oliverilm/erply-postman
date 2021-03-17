@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
 			marginTop: '1em',
-			width: '100%',
+			width: '98%',
 		},
 		heading: {
 			fontSize: theme.typography.pxToRem(15),
