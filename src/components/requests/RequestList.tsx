@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { ResponseContext } from '../../context';
 import { requests as requestList } from './list';
 import Request from './Request';
 
@@ -38,6 +39,7 @@ const Responses = styled.div`
 
 const RequestList = (): JSX.Element => {
 	const [searchString, setSearchString] = useState('');
+	const { responses } = useContext(ResponseContext);
 
 	const search = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchString(e.target.value);
@@ -63,7 +65,15 @@ const RequestList = (): JSX.Element => {
 			</Col>
 
 			<Responses>
-				{<pre>{JSON.stringify({ test: 'test' }, null, 2)}</pre>}
+				{
+					<pre>
+						{JSON.stringify(
+							responses[0]?.response ?? { message: 'No requests done' },
+							null,
+							2
+						)}
+					</pre>
+				}
 			</Responses>
 		</Row>
 	);

@@ -2,10 +2,10 @@ import './App.css';
 
 import React, { useState } from 'react';
 
-import { UserI } from './@interfaces';
+import { ResponseI, UserI } from './@interfaces';
 import PluginStorage from './api/storage';
 import { UserList } from './components/UserList';
-import { UsersListContext } from './context/index';
+import { UsersListContext, ResponseContext } from './context/index';
 import RequestList from './components/requests/RequestList';
 import styled from 'styled-components';
 
@@ -65,6 +65,16 @@ const App: React.FC = () => {
 		setUsersList(PluginStorage.getUsers());
 	};
 
+	const [responses, setResponses] = useState<ResponseI[]>([]);
+
+	const setResponsesToArr = (responses: ResponseI[]) => {
+		setResponses(responses);
+	};
+
+	const addResponse = (response: ResponseI) => {
+		setResponses([response, ...responses]);
+	};
+
 	return (
 		<UsersListContext.Provider
 			value={{
@@ -77,10 +87,18 @@ const App: React.FC = () => {
 				deleteUser,
 			}}
 		>
-			<Row>
-				<UserList userList={usersList} />
-				<RequestList />
-			</Row>
+			<ResponseContext.Provider
+				value={{
+					responses,
+					setResponses: setResponsesToArr,
+					addResponse,
+				}}
+			>
+				<Row>
+					<UserList userList={usersList} />
+					<RequestList />
+				</Row>
+			</ResponseContext.Provider>
 		</UsersListContext.Provider>
 	);
 };

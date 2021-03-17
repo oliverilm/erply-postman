@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { UserI } from '../@interfaces';
+import { ResponseI, UserI } from '../@interfaces';
 
 interface UserContext {
 	usersList: UserI[];
@@ -12,18 +12,10 @@ interface UserContext {
 	updateUser: (user: UserI) => any;
 	deleteUser: (user: UserI) => any;
 }
-
-interface ResponseI {
-	user: UserI;
-	request: string;
-	time: number;
-	response: any;
-	error: boolean;
-}
 interface ResponseContextI {
 	responses: ResponseI[];
 	setResponses: (arr: ResponseI[]) => any;
-	addResponse: (res: ResponseI) => any;
+	addResponse: (resp: ResponseI) => any;
 }
 
 export const UsersListContext = React.createContext<UserContext>({
@@ -58,7 +50,7 @@ export const ResponseContext = React.createContext<ResponseContextI>({
 	setResponses: (arr: ResponseI[]) => {
 		return;
 	},
-	addResponse: (res: ResponseI) => {
+	addResponse: (resp: ResponseI) => {
 		return;
 	},
 });

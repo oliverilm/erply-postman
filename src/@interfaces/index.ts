@@ -64,3 +64,11 @@ export interface UserI {
 	lastLogin: number;
 	credentials: CredentialsI | null;
 }
+
+export interface ResponseI {
+	user: UserI;
+	request: string;
+	time: number;
+	response: any;
+	error: boolean;
+}

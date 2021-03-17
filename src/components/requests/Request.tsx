@@ -16,8 +16,9 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { type } from 'node:os';
 import React, { useContext, useState } from 'react';
+import { ResponseI } from '../../@interfaces';
 import api from '../../api';
-import { UsersListContext } from '../../context';
+import { ResponseContext, UsersListContext } from '../../context';
 import { RequestContent, RequestI } from './list';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,6 +50,7 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 	const classes = useStyles();
 	const [params, setParams] = useState<RequestParam>({});
 	const { usersList } = useContext(UsersListContext);
+	const { addResponse } = useContext(ResponseContext);
 
 	const renderFields = () => {
 		return fields.map((param) => {
@@ -88,9 +90,15 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 			...params,
 		};
 		const response = await api.generic(body);
-		// do something with response.
-		// handle errors and response
-		console.log(response);
+
+		const responseObj: ResponseI = {
+			user,
+			request,
+			time: +new Date() / 1000,
+			response,
+			error: response.data.status.responseStatus === 'error',
+		};
+		addResponse(responseObj);
 	};
 
 	return (
