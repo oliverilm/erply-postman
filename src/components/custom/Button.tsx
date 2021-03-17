@@ -6,7 +6,7 @@ import './style.css';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: VariantType;
-	icon?: OverridableComponent<SvgIconTypeMap<any, 'svg'>>;
+	icon?: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>;
 	iconPlacement?: 'right' | 'left';
 }
 

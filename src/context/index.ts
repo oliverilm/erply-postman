@@ -16,6 +16,8 @@ interface ResponseContextI {
 	responses: ResponseI[];
 	setResponses: (arr: ResponseI[]) => any;
 	addResponse: (resp: ResponseI) => any;
+	isLoading: boolean;
+	setIsLoading: (loading: boolean) => any | void;
 }
 
 export const UsersListContext = React.createContext<UserContext>({
@@ -51,6 +53,10 @@ export const ResponseContext = React.createContext<ResponseContextI>({
 		return;
 	},
 	addResponse: (resp: ResponseI) => {
+		return;
+	},
+	isLoading: false,
+	setIsLoading: (loading: boolean) => {
 		return;
 	},
 });

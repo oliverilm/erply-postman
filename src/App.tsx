@@ -8,11 +8,13 @@ import { UserList } from './components/UserList';
 import { UsersListContext, ResponseContext } from './context/index';
 import RequestList from './components/requests/RequestList';
 import styled from 'styled-components';
+import ResponseList from './components/requests/ResponseList';
 
 const Row = styled.div`
 	display: flex;
 	flex: 1;
-	flex-direction: 'row';
+	flex-direction: row;
+	max-width: 100vw;
 `;
 
 const App: React.FC = () => {
@@ -66,6 +68,7 @@ const App: React.FC = () => {
 	};
 
 	const [responses, setResponses] = useState<ResponseI[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const setResponsesToArr = (responses: ResponseI[]) => {
 		setResponses(responses);
@@ -92,11 +95,14 @@ const App: React.FC = () => {
 					responses,
 					setResponses: setResponsesToArr,
 					addResponse,
+					isLoading,
+					setIsLoading,
 				}}
 			>
 				<Row>
 					<UserList userList={usersList} />
 					<RequestList />
+					<ResponseList />
 				</Row>
 			</ResponseContext.Provider>
 		</UsersListContext.Provider>

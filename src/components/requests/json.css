@@ -1,0 +1,37 @@
+pre {
+    padding: 5px; margin:
+    5px;
+  }
+
+.string {
+    color: #ffc1cc;
+    word-wrap: break-word;
+}
+
+.number {
+    color: #4cf8a8;
+    word-wrap: break-word;
+}
+
+.boolean {
+    color: #b22276;
+}
+
+.null {
+    color: #ffffff;
+}
+
+.key {
+    color: #37caff;
+    word-wrap: break-word;
+}
+
+.more {
+    transition: all 300ms;
+    color: #fff;
+}
+
+.more:hover {
+    transition: all 300ms;
+    color: #3498db;
+}

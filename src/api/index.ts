@@ -23,7 +23,7 @@ interface BaseGeneric {
 	request: string;
 }
 interface GenericRequestI extends BaseGeneric {
-	[key: string]: string | number | any;
+	[key: string]: string | number | unknown;
 }
 
 export default {
@@ -41,7 +41,7 @@ export default {
 		return axios.post(`https://${clientCode}.erply.com/api/`, body);
 	},
 
-	generic: (body: GenericRequestI): Promise<BaseRequestResponse<any>> => {
+	generic: (body: GenericRequestI): Promise<BaseRequestResponse<unknown>> => {
 		const { user, ...rest } = body;
 		const completeBody = {
 			sessionKey: user.credentials?.sessionKey,

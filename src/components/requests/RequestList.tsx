@@ -1,20 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ResponseContext } from '../../context';
 import { requests as requestList } from './list';
 import Request from './Request';
 
 const Col = styled.div`
 	display: flex;
 	flex-direction: column;
-`;
-
-const Row = styled.div`
-	margin-top: 1em;
-	display: flex;
-	flex-direction: row;
-	flex: 1;
-	min-height: 100%;
+	width: 100%;
 `;
 
 const Input = styled.input`
@@ -26,20 +18,8 @@ const Input = styled.input`
 	width: 300px;
 `;
 
-const Responses = styled.div`
-	background-color: #34495e;
-	width: 100%;
-	min-height: 90vh;
-	max-height: 90vh;
-	margin: 1.5em;
-	color: white;
-	padding: 1em;
-	overflow-y: scroll;
-`;
-
 const RequestList = (): JSX.Element => {
 	const [searchString, setSearchString] = useState('');
-	const { responses } = useContext(ResponseContext);
 
 	const search = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchString(e.target.value);
@@ -56,26 +36,21 @@ const RequestList = (): JSX.Element => {
 	};
 
 	return (
-		<Row>
-			<Col style={{ marginTop: '2em' }}>
-				<div>
-					<Input type="text" placeholder="search..." onChange={search} />
-				</div>
-				<div style={{ minWidth: 500 }}>{renderRequests()}</div>
-			</Col>
-
-			<Responses>
-				{
-					<pre>
-						{JSON.stringify(
-							responses[0]?.response ?? { message: 'No requests done' },
-							null,
-							2
-						)}
-					</pre>
-				}
-			</Responses>
-		</Row>
+		<Col style={{ marginTop: '2em' }}>
+			<div>
+				<Input type="text" placeholder="search..." onChange={search} />
+			</div>
+			<div
+				style={{
+					minWidth: 500,
+					minHeight: '90vh',
+					maxHeight: '90vh',
+					overflowY: 'scroll',
+				}}
+			>
+				{renderRequests()}
+			</div>
+		</Col>
 	);
 };
 

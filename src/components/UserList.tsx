@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context/index';
 import Modal from './Modal';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import './modalStyle.css';
 import UserManager from '../api/user';
 import { Menu, MenuItem } from '@material-ui/core';

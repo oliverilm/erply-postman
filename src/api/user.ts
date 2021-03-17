@@ -1,6 +1,5 @@
 import { UserI } from '../@interfaces';
 import api from './index';
-import PluginStorage from './storage';
 
 export const defaultUser: UserI = {
 	selected: true,

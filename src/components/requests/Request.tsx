@@ -1,10 +1,8 @@
-import classes from '*.module.css';
 import {
 	Accordion,
 	AccordionSummary,
 	Typography,
 	AccordionDetails,
-	Chip,
 	Divider,
 	AccordionActions,
 	Button,
@@ -12,14 +10,16 @@ import {
 	createStyles,
 	Theme,
 	TextField,
+	InputLabel,
+	MenuItem,
+	Select,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { type } from 'node:os';
 import React, { useContext, useState } from 'react';
 import { ResponseI } from '../../@interfaces';
 import api from '../../api';
 import { ResponseContext, UsersListContext } from '../../context';
-import { RequestContent, RequestI } from './list';
+import { RequestI } from './list';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -46,28 +46,56 @@ interface RequestParam {
 }
 
 const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
-	const { title, request, fields, description } = requestObj;
+	const { request, fields } = requestObj;
 	const classes = useStyles();
 	const [params, setParams] = useState<RequestParam>({});
 	const { usersList } = useContext(UsersListContext);
-	const { addResponse } = useContext(ResponseContext);
+	const { addResponse, setIsLoading } = useContext(ResponseContext);
+
+	const change = (name: string, e: any) => {
+		const value = e?.target?.value ?? '';
+		const tempParams = params;
+		tempParams[name] = value;
+
+		setParams(tempParams);
+	};
 
 	const renderFields = () => {
 		return fields.map((param) => {
-			const { name, required, type, helper } = param;
+			const { name, required, type, options } = param;
+
 			return (
-				<div key={name}>
-					<TextField
-						id={name}
-						label={name}
-						required={required}
-						type={type}
-						onChange={(e) => {
-							const value =
-								type === 'string' ? e.target.value : Number(e.target.value);
-							params[name] = value;
-						}}
-					/>
+				<div key={name} style={{ marginTop: '.5em' }}>
+					{type === 'select' ? (
+						<>
+							<InputLabel id={`${name}-label`}>{name}</InputLabel>
+							<Select
+								labelId={`${name}-label`}
+								id={`${name}-select`}
+								value={params[name]} // TODO: fix this
+								onChange={(e) => {
+									change(name, e);
+								}}
+							>
+								<MenuItem value={undefined}></MenuItem>
+								{options?.map((op) => (
+									<MenuItem key={op} value={op}>
+										{op}
+									</MenuItem>
+								))}
+							</Select>
+						</>
+					) : (
+						<TextField
+							id={name}
+							label={name}
+							required={required}
+							type={type}
+							onChange={(e) => {
+								change(name, e);
+							}}
+						/>
+					)}
 				</div>
 			);
 		});
@@ -79,17 +107,18 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 		return true;
 	};
 
-	const sendRequest = async (e: any) => {
+	const sendRequest = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const user = usersList.find((u) => u.selected);
 		if (!user) return;
-
+		setIsLoading(true);
 		const body = {
 			user,
 			request,
 			...params,
 		};
 		const response = await api.generic(body);
+		setIsLoading(false);
 
 		const responseObj: ResponseI = {
 			user,
