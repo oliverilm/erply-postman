@@ -75,7 +75,7 @@ export const requests: RequestI[] = [
 
 export const CustomerMsRequests: RequestI[] = [
 	{
-		request: 'V1/Address/getMasterRecord',
+		request: 'V1/Customer/getMasterRecord',
 		title: 'get customers master record',
 		fields: [{ name: 'id', required: true, type: 'number' }],
 	},
