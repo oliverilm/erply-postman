@@ -4,11 +4,17 @@ import styled from 'styled-components';
 
 import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context/index';
-import Modal from './Modal';
 import './modalStyle.css';
 import UserManager from '../api/user';
-import { Menu, MenuItem } from '@material-ui/core';
+import {
+	Divider,
+	FormControl,
+	Menu,
+	MenuItem,
+	Typography,
+} from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
+import { Button } from './custom/Button';
 
 const ListCard = styled.div`
 	border-radius: 5px;
@@ -165,15 +171,95 @@ interface UserListProps {
 	userList: UserI[];
 }
 
+const Input = styled.input`
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 0.5em;
+	letter-spacing: 2px;
+	margin: 0.1em;
+	text-align: center;
+	width: 200px;
+	margin-bottom: 0.3em;
+`;
+
 export const UserList: React.FC<UserListProps> = ({ userList }) => {
+	const [clientCode, setClientCode] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+	const [userName, setUserName] = useState<string>('');
+	const { usersList, addUser } = useContext(UsersListContext);
+
+	const isValid = clientCode && userName && password;
+
+	const addNewUser = () => {
+		if (clientCode && userName && password) {
+			const newUser: UserI = {
+				id: usersList.length,
+				selected: true,
+				username: userName,
+				password,
+				sessionKey: null,
+				clientCode,
+				lastLogin: 0,
+				credentials: null,
+			};
+			addUser(newUser);
+		}
+	};
+
+	const changeUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		setUserName(e?.target.value || '');
+	};
+
+	const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(e?.target.value || '');
+	};
+
+	const changeClientcode = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setClientCode(e?.target.value || '');
+	};
+
 	return (
-		<div style={{ padding: '1em' }}>
-			<div style={{ margin: '1em 0px', width: '100%' }}>
-				<Modal />
+		<div
+			style={{
+				padding: '1em',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				borderRight: '1px solid #ccc',
+				marginRight: '1em',
+			}}
+		>
+			<div>
+				<Typography variant="h6">Profiles</Typography>
+				<Divider />
+				<br />
+				{userList.map((user, index) => (
+					<UserListItem key={index} user={user} />
+				))}
 			</div>
-			{userList.map((user, index) => (
-				<UserListItem key={index} user={user} />
-			))}
+			<div style={{ display: 'flex', justifyContent: 'center' }}>
+				<FormControl>
+					<Input
+						type="text"
+						onChange={changeClientcode}
+						placeholder="clientCode"
+					/>
+					<Input type="text" onChange={changeUsername} placeholder="username" />
+					<Input
+						type="password"
+						onChange={changePassword}
+						placeholder="password"
+					/>
+					<Button
+						style={{ pointerEvents: isValid ? 'all' : 'none' }}
+						type={'submit'}
+						variant={!isValid ? 'secondary' : 'primary'}
+						onClick={addNewUser}
+					>
+						Add User
+					</Button>
+				</FormControl>
+			</div>
 		</div>
 	);
 };

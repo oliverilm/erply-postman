@@ -72,3 +72,26 @@ export interface ResponseI {
 	response: any;
 	error: boolean;
 }
+
+export interface CustomerAPIResponse<T> {
+	data: {
+		result: null | T;
+		api: {
+			time: null | any;
+			uniqueId: null | any;
+			cache: {
+				cached: boolean;
+				ttl: null | any;
+				expires: null | number;
+			};
+			path: null | any;
+			generationTime: string;
+		};
+		error: {
+			message: string;
+			code: number;
+		};
+	};
+	status: number;
+	statusText: string;
+}

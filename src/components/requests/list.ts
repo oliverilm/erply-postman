@@ -69,7 +69,20 @@ export const requests: RequestI[] = [
 			{ name: 'groupID', required: false, type: 'number' },
 			{ name: 'categoryID', required: false, type: 'number' },
 			{ name: 'code', required: false, type: 'string' },
-			{ name: 'code', required: false, type: 'string' },
 		],
+	},
+];
+
+export const CustomerMsRequests: RequestI[] = [
+	{
+		request: 'V1/Address/getMasterRecord',
+		title: 'get customers master record',
+		fields: [{ name: 'id', required: true, type: 'number' }],
+	},
+
+	{
+		request: 'V1/Address/list',
+		title: 'get customers master record',
+		fields: [{ name: 'id', required: true, type: 'number' }],
 	},
 ];

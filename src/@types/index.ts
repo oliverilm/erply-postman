@@ -4,3 +4,5 @@ export type VariantType =
 	| 'error'
 	| 'success'
 	| 'info';
+
+export type RequestType = 'CUSTOMER' | 'ERPLY';

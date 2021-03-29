@@ -16,7 +16,8 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { useContext, useState } from 'react';
-import { ResponseI } from '../../@interfaces';
+import { BaseRequestResponse, ResponseI } from '../../@interfaces';
+import { RequestType } from '../../@types';
 import api from '../../api';
 import { ResponseContext, UsersListContext } from '../../context';
 import { RequestI } from './list';
@@ -39,21 +40,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
 	requestObj: RequestI;
+	apiField: RequestType;
 }
 
 interface RequestParam {
 	[key: string]: string | number;
 }
 
-const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
+const Request: React.FC<Props> = ({
+	requestObj,
+	apiField = 'ERPLY',
+}): JSX.Element => {
 	const { request, fields } = requestObj;
 	const classes = useStyles();
-	const [params, setParams] = useState<RequestParam>({});
+	const [params, setParams] = useState<RequestParam>(() => {
+		const state: RequestParam = {};
+		fields.forEach(({ name }) => {
+			state[name] = '';
+		});
+		return state;
+	});
 	const { usersList } = useContext(UsersListContext);
 	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
 	const change = (name: string, value: string | unknown) => {
 		const tempParams = params;
+
 		tempParams[name] =
 			typeof value === 'string' || typeof value === 'number' ? value : ''; // TODO: seems wrong
 
@@ -63,9 +75,8 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 	const renderFields = () => {
 		return fields.map((param) => {
 			const { name, required, type, options } = param;
-
 			return (
-				<div key={name} style={{ marginTop: '.5em' }}>
+				<div key={`${request}-${name}`} style={{ marginTop: '.5em' }}>
 					{type === 'select' ? (
 						<>
 							<InputLabel id={`${name}-label`}>{name}</InputLabel>
@@ -73,14 +84,14 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 								style={{ width: 300 }}
 								labelId={`${name}-label`}
 								id={`${name}-select`}
-								value={params[name]} // TODO: fix this
+								value={params[name]}
 								onChange={(e) => {
 									change(name, e.target.value);
 								}}
 							>
-								<MenuItem value={undefined}></MenuItem>
+								<MenuItem value={''}></MenuItem>
 								{options?.map((op) => (
-									<MenuItem key={op} value={op}>
+									<MenuItem key={`${op}-${name}`} value={op}>
 										{op}
 									</MenuItem>
 								))}
@@ -88,13 +99,13 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 						</>
 					) : (
 						<TextField
-							id={name}
+							id={`${request}-${name}`}
 							label={name}
 							required={required}
 							type={type}
 							style={{ width: 300 }}
 							onChange={(e) => {
-								change(name, e);
+								change(name, e.target.value);
 							}}
 						/>
 					)}
@@ -114,12 +125,24 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 		const user = usersList.find((u) => u.selected);
 		if (!user) return;
 		setIsLoading(true);
+
+		const postParams: { [key: string]: string | number } = {};
+
+		Object.keys(params).forEach((key) => {
+			const value = params[key];
+			if (value !== '') {
+				const type = fields.find((el) => el.name === key);
+
+				postParams[key] = type?.type === 'number' ? Number(value) : value;
+			}
+		});
 		const body = {
 			user,
 			request,
-			...params,
+			...postParams,
 		};
-		const response = await api.generic(body);
+		const response = await api[apiField].generic(body);
+		console.log(response);
 		setIsLoading(false);
 
 		const responseObj: ResponseI = {
@@ -127,7 +150,10 @@ const Request: React.FC<Props> = ({ requestObj }): JSX.Element => {
 			request,
 			time: +new Date() / 1000,
 			response,
-			error: response.data.status.responseStatus === 'error',
+			error:
+				'records' in response.data
+					? response.data.status.responseStatus === 'error'
+					: response.data.error.code > 0,
 		};
 		addResponse(responseObj);
 	};
