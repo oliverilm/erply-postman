@@ -123,8 +123,11 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 			className={`user-card ${selected ? 'selected' : ''}`}
 			onDoubleClick={selectUser}
 		>
-			<ListCardContent>
-				<ListCardRow className={'user-card-detail'}>
+			<ListCardContent style={{ flex: 1 }}>
+				<ListCardRow
+					style={{ alignItems: 'flex-start' }}
+					className={'user-card-detail'}
+				>
 					<div>
 						{clientCode} - {username}
 					</div>
@@ -138,7 +141,10 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						)}
 					</div>
 				</ListCardRow>
-				<ListCardRow className={'user-card-session'}>
+				<ListCardRow
+					style={{ alignItems: 'flex-end' }}
+					className={'user-card-session'}
+				>
 					<div>
 						{user.credentials?.sessionKey.substr(0, 15) ?? 'xxxxxxxxxxxxxxx'}
 					</div>
@@ -251,12 +257,15 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 						placeholder="password"
 					/>
 					<Button
-						style={{ pointerEvents: isValid ? 'all' : 'none' }}
+						style={{
+							cursor: isValid ? 'pointer' : 'not-allowed',
+							pointerEvents: isValid ? 'all' : 'none',
+						}}
 						type={'submit'}
-						variant={!isValid ? 'secondary' : 'primary'}
+						variant={!isValid ? 'error' : 'primary'}
 						onClick={addNewUser}
 					>
-						Add User
+						{isValid ? 'Add user' : 'Please fill all fields'}
 					</Button>
 				</FormControl>
 			</div>
