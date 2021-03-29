@@ -142,7 +142,6 @@ const Request: React.FC<Props> = ({
 			...postParams,
 		};
 		const response = await api[apiField].generic(body);
-		console.log(response);
 		setIsLoading(false);
 
 		const responseObj: ResponseI = {
@@ -167,7 +166,9 @@ const Request: React.FC<Props> = ({
 						aria-controls="panel1c-content"
 						id="panel1c-header"
 					>
-						<Typography className={classes.heading}>{request}</Typography>
+						<Typography component={'span'} className={classes.heading}>
+							{request}
+						</Typography>
 					</AccordionSummary>
 					<AccordionDetails className={classes.details}>
 						{renderFields()}

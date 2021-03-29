@@ -236,7 +236,9 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 			}}
 		>
 			<div>
-				<Typography variant="h6">Profiles</Typography>
+				<Typography component={'span'} variant="h6">
+					Profiles
+				</Typography>
 				<Divider />
 				<br />
 				{userList.map((user, index) => (
