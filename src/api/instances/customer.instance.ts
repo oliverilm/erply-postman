@@ -9,8 +9,10 @@ customer.interceptors.request.use((request) => {
 	request.headers['Customer-Registry-JWT'] = request.data.jwt;
 	request.headers['Erply-Api-Client-Code'] = request.data.clientCode;
 	request.headers['Erply-Api-Session-Key'] = request.data.sessionKey;
+
 	formData.append(`api[path]`, request.data.request);
 	formData.append(`api[jwt]`, request.data.jwt);
+
 	delete request.data.request;
 	delete request.data.sessionKey;
 	delete request.data.clientCode;

@@ -59,16 +59,16 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 
 	useEffect(() => {
-		if (user.credentials !== null) {
-			setInterval(() => {
-				setTimeTilEnd(timeUntilAuthEnd());
-			}, 1000);
-		} else {
-			updateUser({ ...user, credentials: null });
-		}
-	}, []);
+		const interval = setInterval(() => {
+			setTimeTilEnd(timeUntilAuthEnd());
+		}, 1000);
 
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+		return () => {
+			clearInterval(interval);
+		};
+	}, [user]);
+
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
 	const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -123,7 +123,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 			className={`user-card ${selected ? 'selected' : ''}`}
 			onDoubleClick={selectUser}
 		>
-			<ListCardContent style={{ flex: 1 }}>
+			<ListCardContent style={{ flex: 1, minHeight: '3em' }}>
 				<ListCardRow
 					style={{ alignItems: 'flex-start' }}
 					className={'user-card-detail'}
