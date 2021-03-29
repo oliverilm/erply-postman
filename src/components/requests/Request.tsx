@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { useContext, useState } from 'react';
-import { BaseRequestResponse, ResponseI } from '../../@interfaces';
+import { ResponseI } from '../../@interfaces';
 import { RequestType } from '../../@types';
 import api from '../../api';
 import { ResponseContext, UsersListContext } from '../../context';

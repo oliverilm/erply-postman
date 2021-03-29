@@ -1,11 +1,4 @@
-import {
-	Tabs,
-	Tab,
-	Box,
-	Typography,
-	makeStyles,
-	Theme,
-} from '@material-ui/core';
+import { Tabs, Tab, Box, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import MainRequest from './MainRequest';
@@ -22,7 +15,10 @@ const Col = styled.div`
 const RequestList = (): JSX.Element => {
 	const [value, setValue] = useState(0);
 
-	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+	const handleChange = (
+		event: React.ChangeEvent<unknown>,
+		newValue: number
+	) => {
 		setValue(newValue);
 	};
 
@@ -53,8 +49,8 @@ const RequestList = (): JSX.Element => {
 
 interface TabPanelProps {
 	children?: React.ReactNode;
-	index: any;
-	value: any;
+	index: unknown;
+	value: unknown;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -77,7 +73,7 @@ function TabPanel(props: TabPanelProps) {
 	);
 }
 
-function a11yProps(index: any) {
+function a11yProps(index: number) {
 	return {
 		id: `scrollable-auto-tab-${index}`,
 		'aria-controls': `scrollable-auto-tabpanel-${index}`,
