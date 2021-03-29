@@ -5,6 +5,7 @@ import './json.css';
 import { jsonDisplay } from '../../utils';
 import { CircularProgress } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import ResponseHistory from './ResponseHistory';
 
 const Responses = styled.div`
 	background-color: #34495e;
@@ -33,10 +34,7 @@ const ResponseList: React.FC = (): JSX.Element => {
 		<Responses>
 			{responses.length >= 0 && (
 				<ListOfPastResponses>
-					<MoreHorizIcon
-						className={'more'}
-						style={{ fontSize: '2.5em', cursor: 'pointer' }}
-					/>
+					<ResponseHistory />
 				</ListOfPastResponses>
 			)}
 			{isLoading ? (
