@@ -27,13 +27,6 @@ const Td = styled.td`
 	border: 1px solid #7f8c8d;
 `;
 
-const LoadResponse = styled.span`
-	position: absolute;
-
-	right: 5px;
-	color: red;
-`;
-
 const ResponseHistory: React.FC<ResponseHistoryProps> = (): JSX.Element => {
 	const [open, setOpen] = useState<boolean>(false);
 	const { responses } = useContext(ResponseContext);
@@ -72,6 +65,7 @@ const ResponseHistory: React.FC<ResponseHistoryProps> = (): JSX.Element => {
 
 	const loadResponse = (response: ResponseI) => {
 		// load response to dashboard
+		console.log(response);
 	};
 
 	const renderResponses = () => {

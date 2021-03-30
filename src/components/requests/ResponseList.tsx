@@ -4,7 +4,6 @@ import { ResponseContext } from '../../context';
 import './json.css';
 import { jsonDisplay } from '../../utils';
 import { CircularProgress } from '@material-ui/core';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ResponseHistory from './ResponseHistory';
 
 const Responses = styled.div`

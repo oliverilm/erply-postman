@@ -6,3 +6,4 @@ export type VariantType =
 	| 'info';
 
 export type RequestType = 'CUSTOMER' | 'ERPLY';
+export type CafaLevel = 'Company' | 'Warehouse' | 'Pos' | 'User';

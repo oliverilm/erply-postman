@@ -63,6 +63,7 @@ export interface UserI {
 	selected: boolean;
 	lastLogin: number;
 	credentials: CredentialsI | null;
+	endpoints: ServiceEndpointsI | null;
 }
 
 export interface ResponseI {
@@ -94,4 +95,40 @@ export interface CustomerAPIResponse<T> {
 	};
 	status: number;
 	statusText: string;
+}
+export interface EndpointI {
+	url: string;
+	documentation: string;
+}
+
+export interface ServiceEndpointsI {
+	cafa: EndpointI;
+	pim: EndpointI;
+	wms: EndpointI;
+	promotion: EndpointI;
+	reports: EndpointI;
+	json: EndpointI;
+	assignments: EndpointI;
+	'account-admin': EndpointI;
+	'visitor-queue': EndpointI;
+	loyalty: EndpointI;
+	cdn: EndpointI;
+	tasks: EndpointI;
+	webhook: EndpointI;
+	user: EndpointI;
+	import: EndpointI;
+	ems: EndpointI;
+	clockin: EndpointI;
+	ledger: EndpointI;
+	auth: EndpointI;
+	crm: EndpointI;
+	buum: EndpointI;
+	sales: EndpointI;
+	pricing: EndpointI;
+	'pos-api': EndpointI;
+	erply: {
+		isSandbox: true;
+		url: '';
+		documentation: '';
+	};
 }

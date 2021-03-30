@@ -207,6 +207,7 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 				clientCode,
 				lastLogin: 0,
 				credentials: null,
+				endpoints: null,
 			};
 			addUser(newUser);
 		}

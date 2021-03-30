@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import MainRequest from './MainRequest';
 import { requests as requestList, CustomerMsRequests } from './list';
 import { UsersListContext } from '../../context';
+import CafaIndex from './cafa/CafaIndex';
+import { hasCafaAccess, hasCustomerAPIAccess } from './scripts/permissions';
 
 const Col = styled.div`
 	display: flex;
@@ -18,6 +20,7 @@ const RequestList = (): JSX.Element => {
 	const { usersList } = useContext(UsersListContext);
 	const [userSelected, setUserSelected] = useState<boolean>(false);
 	const [hasCRUrls, setHasCRUrls] = useState<boolean>(false);
+	const [hasCafaEnabled, setHasCafaEnabled] = useState<boolean>(false);
 
 	const handleChange = (
 		event: React.ChangeEvent<unknown>,
@@ -31,18 +34,21 @@ const RequestList = (): JSX.Element => {
 
 		if (selectedUser) {
 			setUserSelected(true);
-			const hasUrls =
-				(selectedUser?.credentials &&
-					selectedUser.credentials.customerRegistryURLs.length > 0) ||
-				false;
+
+			const hasUrls = hasCustomerAPIAccess(selectedUser);
+			const hasCafa = hasCafaAccess(selectedUser);
+
 			setHasCRUrls(hasUrls);
-			if (!hasCRUrls) {
+			setHasCafaEnabled(hasCafa);
+
+			if ((!hasCRUrls && value === 1) || (!hasCafa && value === 2)) {
 				setValue(0);
 			}
 		} else {
 			setUserSelected(false);
 			setHasCRUrls(false);
-			setValue(0);
+			setHasCafaEnabled(false);
+			if (value === 1 || value === 2) setValue(0);
 		}
 	});
 
@@ -59,17 +65,29 @@ const RequestList = (): JSX.Element => {
 				aria-label="scrollable auto tabs example"
 			>
 				<Tab disabled={!userSelected} label="Erply API" {...a11yProps(0)} />
+
 				<Tab
 					disabled={!userSelected || !hasCRUrls}
 					label={'Customer MS'}
 					{...a11yProps(1)}
 				/>
+				<Tab
+					disabled={!userSelected || !hasCafaEnabled}
+					label={'CAFA API'}
+					{...a11yProps(2)}
+				/>
 			</Tabs>
+
 			<TabPanel value={value} index={0}>
 				<MainRequest apiField={'ERPLY'} requests={requestList} />
 			</TabPanel>
+
 			<TabPanel value={value} index={1}>
 				<MainRequest apiField={'CUSTOMER'} requests={CustomerMsRequests} />
+			</TabPanel>
+
+			<TabPanel value={value} index={2}>
+				<CafaIndex />
 			</TabPanel>
 		</Col>
 	);
