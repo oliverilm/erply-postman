@@ -67,7 +67,9 @@ const App: React.FC = () => {
 		setUsersList(PluginStorage.getUsers());
 	};
 
-	const [responses, setResponses] = useState<ResponseI[]>([]);
+	const [responses, setResponses] = useState<ResponseI[]>(
+		PluginStorage.getResponses()
+	);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const setResponsesToArr = (responses: ResponseI[]) => {
@@ -75,7 +77,9 @@ const App: React.FC = () => {
 	};
 
 	const addResponse = (response: ResponseI) => {
-		setResponses([response, ...responses]);
+		const newResponses = [response, ...responses];
+		PluginStorage.setResponses(newResponses);
+		setResponses(PluginStorage.getResponses());
 	};
 
 	return (

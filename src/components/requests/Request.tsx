@@ -152,7 +152,7 @@ const Request: React.FC<Props> = ({
 			error:
 				'records' in response.data
 					? response.data.status.responseStatus === 'error'
-					: response.data.error.code > 0,
+					: response.data.error?.code > 0 || true,
 		};
 		addResponse(responseObj);
 	};

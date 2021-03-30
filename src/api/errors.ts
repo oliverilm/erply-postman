@@ -180,9 +180,11 @@ export const errors: ErrorObjI = {
 	1212: 'Account has been configured to use the login app for logins. Please use the login app to log in.',
 };
 
-export default (errorCode: number): string => {
+const translateError = (errorCode: number): string => {
 	if (errors[errorCode]) {
 		return errors[errorCode];
 	}
 	return 'Unknown error occured';
 };
+
+export default translateError;

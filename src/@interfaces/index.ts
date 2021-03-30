@@ -69,7 +69,7 @@ export interface ResponseI {
 	user: UserI;
 	request: string;
 	time: number;
-	response: any;
+	response: CustomerAPIResponse<any> | BaseRequestResponse<any>;
 	error: boolean;
 }
 
