@@ -13,6 +13,12 @@ export const defaultUser: UserI = {
 	endpoints: null,
 };
 
+export interface PostmanValuesI {
+	customerRegistryUrl: string;
+	customerRegistryToken: string;
+	cafaUrl: string;
+}
+
 export default class UserManager {
 	user: UserI;
 
@@ -50,6 +56,15 @@ export default class UserManager {
 			return endDate;
 		}
 		return null;
+	}
+
+	generatePostmanValues(): PostmanValuesI {
+		const { credentials, endpoints } = this.user;
+		return {
+			cafaUrl: '',
+			customerRegistryToken: '',
+			customerRegistryUrl: '',
+		};
 	}
 
 	// timeTilAuthEnd(): number // returns number of seconds

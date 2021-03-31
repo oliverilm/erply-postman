@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import { Button } from './custom/Button';
-import { generatePostmanProfileLink } from './requests/scripts/postman';
+import { generatePostmanProfile } from './requests/scripts/postman';
 
 const ListCard = styled.div`
 	border-radius: 5px;
@@ -119,10 +119,6 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 		return (nr ?? 0).toString().padStart(2, '0');
 	};
 
-	const invokeDownload = () => {
-		generatePostmanProfileLink(user);
-	};
-
 	return (
 		<ListCard
 			className={`user-card ${selected ? 'selected' : ''}`}
@@ -172,7 +168,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						<MenuItem
 							onClick={() => {
 								handleClose();
-								invokeDownload();
+								generatePostmanProfile(user);
 							}}
 						>
 							Postman Profile

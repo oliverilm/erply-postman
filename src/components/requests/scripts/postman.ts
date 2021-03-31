@@ -1,5 +1,6 @@
 import { UserI } from '../../../@interfaces';
 import { v4 as uuidv4 } from 'uuid';
+import UserManager from '../../../api/user';
 
 export interface PostmanProfileValueI {
 	key: string;
@@ -18,6 +19,9 @@ export interface PostmanProfileI {
 
 const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	if (!user) return [];
+
+	const um = new UserManager(user);
+
 	return [
 		{
 			key: 'customerRegistryUrl',
@@ -52,7 +56,7 @@ const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	];
 };
 
-export const generatePostmanProfileLink = (user: UserI): void => {
+export const generatePostmanProfile = (user: UserI): void => {
 	const fileName = `${user.clientCode}.postman_environment.json`;
 
 	const result: PostmanProfileI = {
@@ -71,10 +75,5 @@ export const generatePostmanProfileLink = (user: UserI): void => {
 	const element = document.createElement('a');
 	element.href = url;
 	element.download = fileName;
-	element.textContent = 'Postman Profile';
-	element.style.textDecoration = 'none';
-	element.style.color = 'inherit';
-	element.style.padding = '0px';
-	element.style.margin = '0px';
 	element.click();
 };
