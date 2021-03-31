@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../../../api';
 import { UsersListContext } from '../../../context';
-import { CafaRequestI, requestList } from './requestList';
+import { CafaRequestI, requestList } from '../requestLists/cafaRequests';
 import CafaRequest from './CafaRequest';
 
 interface CafaIndexProps {}

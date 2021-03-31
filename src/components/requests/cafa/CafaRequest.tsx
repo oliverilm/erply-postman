@@ -21,7 +21,7 @@ import { UserI } from '../../../@interfaces';
 import { CafaBaseResponse } from '../../../@interfaces/cafa';
 import api from '../../../api';
 import { ResponseContext } from '../../../context';
-import { CafaRequestFieldI, CafaRequestI } from './requestList';
+import { CafaRequestFieldI, CafaRequestI } from '../requestLists/cafaRequests';
 
 interface CafaRequestProps {
 	request: CafaRequestI;

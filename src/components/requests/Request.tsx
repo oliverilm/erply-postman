@@ -20,7 +20,7 @@ import { ResponseI } from '../../@interfaces';
 import { RequestType } from '../../@types';
 import api from '../../api';
 import { ResponseContext, UsersListContext } from '../../context';
-import { RequestI } from './list';
+import { RequestI } from './requestLists/erplyRequests';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({

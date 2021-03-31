@@ -2,10 +2,11 @@ import { Tabs, Tab, Box, Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MainRequest from './MainRequest';
-import { requests as requestList, CustomerMsRequests } from './list';
+import { requests as requestList } from './requestLists/erplyRequests';
 import { UsersListContext } from '../../context';
 import CafaIndex from './cafa/CafaIndex';
 import { hasCafaAccess, hasCustomerAPIAccess } from './scripts/permissions';
+import { CustomerMsRequests } from './requestLists/customerMsRequests';
 
 const Col = styled.div`
 	display: flex;

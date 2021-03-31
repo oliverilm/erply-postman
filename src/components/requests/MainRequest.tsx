@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RequestType } from '../../@types';
-import { RequestI } from './list';
+import { RequestI } from './requestLists/erplyRequests';
 import Request from './Request';
 
 interface MainRequestProps {

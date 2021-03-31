@@ -11,7 +11,7 @@ import {
 	UserI,
 } from '../@interfaces';
 import { CafaBaseResponse, CafaGetAppsResponseI } from '../@interfaces/cafa';
-import { CafaRequestTemplateI } from '../components/requests/cafa/requestList';
+import { CafaRequestTemplateI } from '../components/requests/requestLists/cafaRequests';
 import cafa, { addHeaders, getUrl } from './instances/cafa.instance';
 import customer from './instances/customer.instance';
 import erply from './instances/erply.instance';
