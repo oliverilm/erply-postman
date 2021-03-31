@@ -76,6 +76,4 @@ export default class UserManager {
 			token: credentials?.token || '',
 		};
 	}
-
-	// timeTilAuthEnd(): number // returns number of seconds
 }
