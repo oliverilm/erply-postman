@@ -64,7 +64,7 @@ const Request: React.FC<Props> = ({
 	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
 	const change = (name: string, value: string | unknown) => {
-		const tempParams = params;
+		const tempParams = { ...params };
 
 		tempParams[name] =
 			typeof value === 'string' || typeof value === 'number' ? value : ''; // TODO: seems wrong
