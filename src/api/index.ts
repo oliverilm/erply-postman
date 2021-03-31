@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
 	BaseRequestResponse,
@@ -7,10 +9,7 @@ import {
 	UserI,
 } from '../@interfaces';
 import { CafaBaseResponse, CafaGetAppsResponseI } from '../@interfaces/cafa';
-import {
-	CafaRequestI,
-	CafaRequestTemplateI,
-} from '../components/requests/cafa/requestList';
+import { CafaRequestTemplateI } from '../components/requests/cafa/requestList';
 import cafa, { addHeaders, getUrl } from './instances/cafa.instance';
 import customer from './instances/customer.instance';
 import erply from './instances/erply.instance';

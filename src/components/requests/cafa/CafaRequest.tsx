@@ -70,7 +70,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 			[key: string]: (
 				user: UserI,
 				formData: { [key: string]: string }
-			) => Promise<CafaBaseResponse<any>>;
+			) => Promise<CafaBaseResponse<unknown>>;
 		} = api.CAFA;
 		setIsLoading(true);
 		const response = await functionsList[apiFunction](user, formState);
