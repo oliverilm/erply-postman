@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import { Button } from './custom/Button';
+import { generatePostmanProfileLink } from './requests/scripts/postman';
 
 const ListCard = styled.div`
 	border-radius: 5px;
@@ -164,6 +165,13 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 					>
 						<MenuItem onClick={login}>Authenticate</MenuItem>
 						<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+						<MenuItem onClick={handleClose}>
+							<div
+								dangerouslySetInnerHTML={{
+									__html: generatePostmanProfileLink(user).outerHTML,
+								}}
+							></div>
+						</MenuItem>
 						<MenuItem onClick={handleClose}>View Details</MenuItem>
 						<MenuItem onClick={deleteThisUser}>Delete</MenuItem>
 					</Menu>

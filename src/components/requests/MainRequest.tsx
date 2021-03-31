@@ -39,6 +39,9 @@ const MainRequest: React.FC<MainRequestProps> = ({
 			.filter((request) =>
 				request.request.toLowerCase().includes(searchString.toLowerCase())
 			)
+			.sort((a, b) => {
+				return a.request.localeCompare(b.request);
+			})
 			.map((request) => {
 				return (
 					<Request

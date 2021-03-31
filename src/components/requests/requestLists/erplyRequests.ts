@@ -117,4 +117,19 @@ export const requests: RequestI[] = [
 			{ name: 'pageNo', required: false, type: 'number' },
 		],
 	},
+	{
+		request: 'editProductInPriceList',
+		title: 'Edit product in price list.',
+		fields: [
+			{ name: 'priceListProductID', required: true, type: 'number' },
+			{ name: 'price', required: false, type: 'number' },
+			{ name: 'amount', required: false, type: 'number' },
+			{ name: 'subsidy', required: false, type: 'number' },
+			{ name: 'Subsidy', required: false, type: 'number' },
+			{ name: 'subsidyTypeID', required: false, type: 'number' },
+			{ name: 'page', required: false, type: 'number' },
+			{ name: 'positionOnPage', required: false, type: 'number' },
+			{ name: 'forecastUnits', required: false, type: 'number' },
+		],
+	},
 ];
