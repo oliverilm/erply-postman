@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { UserI } from '../../@interfaces';
 
@@ -18,7 +20,7 @@ export const addHeaders = (user: UserI): void => {
 	cafa.defaults.baseURL = user.endpoints?.cafa.url || '';
 };
 
-export const getUrl = (url: string, content: any) => {
+export const getUrl = (url: string, content: any): string => {
 	return `${url}?${Object.keys(content)
 		.map((key) => {
 			const value = content[key];
