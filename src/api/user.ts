@@ -17,6 +17,8 @@ export interface PostmanValuesI {
 	customerRegistryUrl: string;
 	customerRegistryToken: string;
 	cafaUrl: string;
+	identityToken: string;
+	token: string;
 }
 
 export default class UserManager {
@@ -61,9 +63,17 @@ export default class UserManager {
 	generatePostmanValues(): PostmanValuesI {
 		const { credentials, endpoints } = this.user;
 		return {
-			cafaUrl: '',
-			customerRegistryToken: '',
-			customerRegistryUrl: '',
+			cafaUrl: endpoints?.cafa.url || '',
+			customerRegistryToken:
+				credentials && credentials.customerRegistryURLs.length > 0
+					? credentials?.customerRegistryURLs[0].token
+					: '',
+			customerRegistryUrl:
+				credentials && credentials.customerRegistryURLs.length > 0
+					? credentials?.customerRegistryURLs[0].url
+					: '',
+			identityToken: credentials?.identityToken || '',
+			token: credentials?.token || '',
 		};
 	}
 

@@ -21,23 +21,15 @@ const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	if (!user) return [];
 
 	const um = new UserManager(user);
+	const {
+		cafaUrl,
+		customerRegistryToken,
+		customerRegistryUrl,
+		token,
+		identityToken,
+	} = um.generatePostmanValues();
 
 	return [
-		{
-			key: 'customerRegistryUrl',
-			value: '',
-			enabled: true,
-		},
-		{
-			key: 'customerRegistryToken',
-			value: '',
-			enabled: true,
-		},
-		{
-			key: 'sessionKey',
-			value: user.credentials?.sessionKey || '',
-			enabled: true,
-		},
 		{
 			key: 'clientCode',
 			value: user.clientCode || '',
@@ -49,8 +41,38 @@ const generateValues = (user: UserI): PostmanProfileValueI[] => {
 			enabled: true,
 		},
 		{
+			key: 'sessionKey',
+			value: user.credentials?.sessionKey || '',
+			enabled: true,
+		},
+		{
 			key: 'password',
 			value: user.password || '',
+			enabled: true,
+		},
+		{
+			key: 'token',
+			value: token,
+			enabled: true,
+		},
+		{
+			key: 'identityToken',
+			value: identityToken,
+			enabled: true,
+		},
+		{
+			key: 'customerRegistryUrl',
+			value: customerRegistryUrl,
+			enabled: true,
+		},
+		{
+			key: 'customerRegistryToken',
+			value: customerRegistryToken,
+			enabled: true,
+		},
+		{
+			key: 'cafaUrl',
+			value: cafaUrl,
 			enabled: true,
 		},
 	];
