@@ -119,6 +119,10 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 		return (nr ?? 0).toString().padStart(2, '0');
 	};
 
+	const invokeDownload = () => {
+		generatePostmanProfileLink(user);
+	};
+
 	return (
 		<ListCard
 			className={`user-card ${selected ? 'selected' : ''}`}
@@ -165,12 +169,13 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 					>
 						<MenuItem onClick={login}>Authenticate</MenuItem>
 						<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
-						<MenuItem onClick={handleClose}>
-							<div
-								dangerouslySetInnerHTML={{
-									__html: generatePostmanProfileLink(user).outerHTML,
-								}}
-							></div>
+						<MenuItem
+							onClick={() => {
+								handleClose();
+								invokeDownload();
+							}}
+						>
+							Postman Profile
 						</MenuItem>
 						<MenuItem onClick={handleClose}>View Details</MenuItem>
 						<MenuItem onClick={deleteThisUser}>Delete</MenuItem>

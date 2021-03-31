@@ -52,7 +52,7 @@ const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	];
 };
 
-export const generatePostmanProfileLink = (user: UserI): HTMLAnchorElement => {
+export const generatePostmanProfileLink = (user: UserI): void => {
 	const fileName = `${user.clientCode}.postman_environment.json`;
 
 	const result: PostmanProfileI = {
@@ -73,8 +73,8 @@ export const generatePostmanProfileLink = (user: UserI): HTMLAnchorElement => {
 	element.download = fileName;
 	element.textContent = 'Postman Profile';
 	element.style.textDecoration = 'none';
-	element.style.color = 'black';
+	element.style.color = 'inherit';
 	element.style.padding = '0px';
 	element.style.margin = '0px';
-	return element;
+	element.click();
 };
