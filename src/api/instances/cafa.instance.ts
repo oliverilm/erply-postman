@@ -18,4 +18,16 @@ export const addHeaders = (user: UserI): void => {
 	cafa.defaults.baseURL = user.endpoints?.cafa.url || '';
 };
 
+export const getUrl = (url: string, content: any) => {
+	return `${url}?${Object.keys(content)
+		.map((key) => {
+			const value = content[key];
+			if (value) {
+				return `${key}=${value}`;
+			}
+		})
+		.filter((el) => el !== undefined)
+		.join('&')}`;
+};
+
 export default cafa;

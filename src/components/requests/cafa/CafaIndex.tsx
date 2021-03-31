@@ -34,7 +34,7 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 
 	useEffect(() => {
 		if (currentUser) {
-			api.CAFA.getApplications(currentUser).then((result) => {
+			api.CAFA.getApplications(currentUser, null).then((result) => {
 				setApplications(result.data.applications);
 			});
 		}
@@ -59,7 +59,15 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 				el.request.toLowerCase().includes(searchString.toLowerCase())
 			)
 			.map((req) => {
-				return <CafaRequest key={req.apiFunction} request={req} />;
+				if (currentUser !== undefined) {
+					return (
+						<CafaRequest
+							key={req.apiFunction}
+							request={req}
+							user={currentUser}
+						/>
+					);
+				}
 			});
 	};
 

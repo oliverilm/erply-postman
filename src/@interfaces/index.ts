@@ -1,3 +1,5 @@
+import { CafaBaseResponse } from './cafa';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface BaseRequestResponse<T> {
 	data: {
@@ -70,7 +72,10 @@ export interface ResponseI {
 	user: UserI;
 	request: string;
 	time: number;
-	response: CustomerAPIResponse<any> | BaseRequestResponse<any>;
+	response:
+		| CustomerAPIResponse<any>
+		| BaseRequestResponse<any>
+		| CafaBaseResponse<any>;
 	error: boolean;
 }
 

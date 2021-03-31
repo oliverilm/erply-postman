@@ -11,6 +11,16 @@ export interface CafaRequestI {
 	fields?: CafaRequestFieldI[];
 }
 
+export interface CafaRequestTemplateI {
+	application: string;
+	level: 'Company' | 'Warehouse' | 'Pos' | 'User';
+	level_id: string;
+	type: string;
+	'Look-Deeper': 'true' | 'false' | '';
+	name?: string;
+	value?: string;
+}
+
 const mainFields: CafaRequestFieldI[] = [
 	{
 		name: 'application',

@@ -16,11 +16,16 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserI } from '../../../@interfaces';
+import { CafaBaseResponse } from '../../../@interfaces/cafa';
+import api from '../../../api';
+import { ResponseContext } from '../../../context';
 import { CafaRequestFieldI, CafaRequestI } from './requestList';
 
 interface CafaRequestProps {
 	request: CafaRequestI;
+	user: UserI;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,35 +44,73 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-const CafaRequest: React.FC<CafaRequestProps> = ({ request }): JSX.Element => {
+const CafaRequest: React.FC<CafaRequestProps> = ({
+	request,
+	user,
+}): JSX.Element => {
 	const classes = useStyles();
-	const [formState, setFormState] = useState<any>(() => {
+	const { addResponse, setIsLoading } = useContext(ResponseContext);
+
+	const [formState, setFormState] = useState<{ [key: string]: string }>(() => {
 		const allStates: { [key: string]: string } = {};
-		request.fields?.forEach((field) => {
-			allStates[field.name] = '';
-		});
+		if (request.fields) {
+			request.fields?.forEach((field) => {
+				allStates[field.name] = '';
+			});
+		}
+
+		return allStates;
 	});
-	const submit = (): void => {
+	const submit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		// submit the filled form.
+		e.preventDefault();
+		console.log(formState);
+		const { apiFunction } = request;
+		const functionsList: {
+			[key: string]: (
+				user: UserI,
+				formData: { [key: string]: string }
+			) => Promise<CafaBaseResponse<any>>;
+		} = api.CAFA;
+		setIsLoading(true);
+		const response = await functionsList[apiFunction](user, formState);
+		console.log(response);
+		const responseObj = {
+			user,
+			request: apiFunction,
+			time: +new Date() / 1000,
+			response: response,
+			error: true,
+		};
+		addResponse(responseObj);
+		setIsLoading(false);
 	};
 
-	const change = (fieldName: string, value: string | unknown) => {
-		// change the value
+	const change = (fieldName: string, value: string) => {
+		const state = { ...formState };
+		state[fieldName] = value;
+		setFormState(state);
 	};
 
-	const generateFieldJSX = (field: CafaRequestFieldI): JSX.Element => {
+	const generateFieldJSX = (
+		field: CafaRequestFieldI,
+		index: number
+	): JSX.Element => {
 		if (field.type === 'select') {
 			return (
-				<div key={`${request}-${name}`} style={{ marginTop: '.5em' }}>
+				<div
+					key={`${request.request}-${name}-${index}`}
+					style={{ marginTop: '.5em' }}
+				>
 					<InputLabel id={`${field.name}-label`}>{field.name}</InputLabel>
 					<Select
 						style={{ width: 300 }}
 						labelId={`${field.name}-label`}
 						id={`${field.name}-select`}
 						required={field.required}
-						value={''}
+						value={formState[field.name]}
 						onChange={(e) => {
-							change(field.name, e.target.value);
+							change(field.name, e.target.value as string);
 						}}
 					>
 						<MenuItem value={''}></MenuItem>
@@ -82,15 +125,19 @@ const CafaRequest: React.FC<CafaRequestProps> = ({ request }): JSX.Element => {
 			);
 		} else if (field.type === 'number') {
 			return (
-				<div key={`${request}-${field.name}`} style={{ marginTop: '.5em' }}>
+				<div
+					key={`${request.request}-${field.name}-${index}`}
+					style={{ marginTop: '.5em' }}
+				>
 					<TextField
-						id={`${request}-${field.name}`}
+						id={`${request.request}-${field.name}`}
 						label={field.name}
 						required={field.required}
+						value={formState[field.name]}
 						type={'number'}
 						style={{ width: 300 }}
 						onChange={(e) => {
-							change(field.name, e.target.value);
+							change(field.name, e.target.value as string);
 						}}
 					/>
 				</div>
@@ -98,15 +145,19 @@ const CafaRequest: React.FC<CafaRequestProps> = ({ request }): JSX.Element => {
 		} else {
 			// string
 			return (
-				<div key={`${request}-${field.name}`} style={{ marginTop: '.5em' }}>
+				<div
+					key={`${request.request}-${field.name}-${index}`}
+					style={{ marginTop: '.5em' }}
+				>
 					<TextField
-						id={`${request}-${field.name}`}
+						id={`${request.request}-${field.name}`}
 						label={field.name}
 						required={field.required}
+						value={formState[field.name]}
 						type={'text'}
 						style={{ width: 300 }}
 						onChange={(e) => {
-							change(field.name, e.target.value);
+							change(field.name, e.target.value as string);
 						}}
 					/>
 				</div>

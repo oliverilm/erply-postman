@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
 	BaseRequestResponse,
 	CredentialsI,
@@ -5,12 +6,12 @@ import {
 	ServiceEndpointsI,
 	UserI,
 } from '../@interfaces';
+import { CafaBaseResponse, CafaGetAppsResponseI } from '../@interfaces/cafa';
 import {
-	CafaBaseResponse,
-	CafaGetAppsResponseI,
-	CafaSaveContentI,
-} from '../@interfaces/cafa';
-import cafa, { addHeaders } from './instances/cafa.instance';
+	CafaRequestI,
+	CafaRequestTemplateI,
+} from '../components/requests/cafa/requestList';
+import cafa, { addHeaders, getUrl } from './instances/cafa.instance';
 import customer from './instances/customer.instance';
 import erply from './instances/erply.instance';
 
@@ -34,13 +35,30 @@ interface APIProps {
 		generic: (body: GenericRequestI) => Promise<BaseRequestResponse<unknown>>;
 	};
 	CAFA: {
-		getApplications: (
-			user: UserI
-		) => Promise<CafaBaseResponse<CafaGetAppsResponseI>>;
-		save: (
+		getConfiguration: (
 			user: UserI,
-			content: CafaSaveContentI
-		) => Promise<CafaBaseResponse<unknown>>;
+			formData: any
+		) => Promise<CafaBaseResponse<any>>;
+		getConfigForApplication: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		deleteConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		getApplications: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		postConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		putConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
 	};
 }
 
@@ -108,17 +126,46 @@ const api: APIProps = {
 
 	CAFA: {
 		getApplications: (
-			user: UserI
+			user: UserI,
+			content: any
 		): Promise<CafaBaseResponse<CafaGetAppsResponseI>> => {
 			addHeaders(user);
 			return cafa.get('configuration/apps');
 		},
-
-		save: (
+		getConfiguration: (
 			user: UserI,
-			content: CafaSaveContentI
-		): Promise<CafaBaseResponse<unknown>> => {
-			return cafa.post('configuration', content);
+			content: CafaRequestTemplateI
+		): Promise<CafaBaseResponse<any>> => {
+			return cafa.get(getUrl('configuration', content), {
+				headers: {
+					'Look-Deeper':
+						content['Look-Deeper'] !== '' && content['Look-Deeper'] === 'true',
+				},
+			});
+		},
+		getConfigForApplication: (
+			user: UserI,
+			content: any
+		): Promise<CafaBaseResponse<any>> => {
+			return cafa.post('', content);
+		},
+		deleteConfiguration: (
+			user: UserI,
+			content: any
+		): Promise<CafaBaseResponse<any>> => {
+			return cafa.post('', content);
+		},
+		postConfiguration: (
+			user: UserI,
+			content: any
+		): Promise<CafaBaseResponse<any>> => {
+			return cafa.post('', content);
+		},
+		putConfiguration: (
+			user: UserI,
+			content: any
+		): Promise<CafaBaseResponse<any>> => {
+			return cafa.post('', content);
 		},
 	},
 };
