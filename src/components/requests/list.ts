@@ -71,6 +71,52 @@ export const requests: RequestI[] = [
 			{ name: 'code', required: false, type: 'string' },
 		],
 	},
+
+	{
+		request: 'getCountries',
+		title: 'get a specific or a list of countries',
+		fields: [
+			{ name: 'recordsOnPage', required: false, type: 'number' },
+			{ name: 'pageNo', required: false, type: 'number' },
+		],
+	},
+	{
+		request: 'getSuppliers',
+		title: 'get a specific or a list of suppliers',
+		fields: [
+			{ name: 'supplierID', required: false, type: 'number' },
+			{ name: 'searchName', required: false, type: 'string' },
+			{ name: 'searchPersonFullName', required: false, type: 'string' },
+			{ name: 'searchPersonFirstName', required: false, type: 'string' },
+			{ name: 'searchPersonLastName', required: false, type: 'string' },
+			{ name: 'searchVATNo', required: false, type: 'string' },
+			{ name: 'searchRegistryCode', required: false, type: 'string' },
+			{ name: 'searchAttributeName', required: false, type: 'string' },
+			{ name: 'searchAttributeValue', required: false, type: 'string' },
+			{ name: 'supplierManagerID', required: false, type: 'number' },
+			{ name: 'groupID', required: false, type: 'number' },
+			{
+				name: 'mode',
+				required: false,
+				type: 'select',
+				options: ['SUPPLIERS', 'CONTACTS', 'ALL'],
+			},
+			{
+				name: 'orderBy',
+				required: false,
+				type: 'select',
+				options: ['supplierID', 'name', 'group', 'lastChanged'],
+			},
+			{
+				name: 'orderByDir',
+				required: false,
+				type: 'select',
+				options: ['asc', 'desc'],
+			},
+			{ name: 'recordsOnPage', required: false, type: 'number' },
+			{ name: 'pageNo', required: false, type: 'number' },
+		],
+	},
 ];
 
 export const CustomerMsRequests: RequestI[] = [

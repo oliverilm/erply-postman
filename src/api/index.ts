@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+	APIProps,
 	BaseRequestResponse,
 	CredentialsI,
 	CustomerAPIResponse,
+	GenericRequestI,
 	ServiceEndpointsI,
 	UserI,
 } from '../@interfaces';
@@ -14,53 +16,9 @@ import cafa, { addHeaders, getUrl } from './instances/cafa.instance';
 import customer from './instances/customer.instance';
 import erply from './instances/erply.instance';
 
-interface BaseGeneric {
-	user: UserI;
-	request: string;
-}
-interface GenericRequestI extends BaseGeneric {
-	[key: string]: string | number | unknown;
-}
-
-interface APIProps {
-	verifyUser: (user: UserI) => Promise<BaseRequestResponse<CredentialsI>>;
-	getServiceEndpoints: (
-		user: UserI
-	) => Promise<BaseRequestResponse<ServiceEndpointsI>>;
-	CUSTOMER: {
-		generic: (body: GenericRequestI) => Promise<CustomerAPIResponse<unknown>>;
-	};
-	ERPLY: {
-		generic: (body: GenericRequestI) => Promise<BaseRequestResponse<unknown>>;
-	};
-	CAFA: {
-		getConfiguration: (
-			user: UserI,
-			formData: any
-		) => Promise<CafaBaseResponse<any>>;
-		getConfigForApplication: (
-			user: UserI,
-			content: any
-		) => Promise<CafaBaseResponse<any>>;
-		deleteConfiguration: (
-			user: UserI,
-			content: any
-		) => Promise<CafaBaseResponse<any>>;
-		getApplications: (
-			user: UserI,
-			content: any
-		) => Promise<CafaBaseResponse<any>>;
-		postConfiguration: (
-			user: UserI,
-			content: any
-		) => Promise<CafaBaseResponse<any>>;
-		putConfiguration: (
-			user: UserI,
-			content: any
-		) => Promise<CafaBaseResponse<any>>;
-	};
-}
-
+/**
+ * generic functions in the api object are ment to do dynamic requests for react components
+ */
 const api: APIProps = {
 	verifyUser: ({
 		clientCode,

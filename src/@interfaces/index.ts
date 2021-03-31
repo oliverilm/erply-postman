@@ -137,3 +137,50 @@ export interface ServiceEndpointsI {
 		documentation: '';
 	};
 }
+
+export interface BaseGeneric {
+	user: UserI;
+	request: string;
+}
+export interface GenericRequestI extends BaseGeneric {
+	[key: string]: string | number | unknown;
+}
+
+export interface APIProps {
+	verifyUser: (user: UserI) => Promise<BaseRequestResponse<CredentialsI>>;
+	getServiceEndpoints: (
+		user: UserI
+	) => Promise<BaseRequestResponse<ServiceEndpointsI>>;
+	CUSTOMER: {
+		generic: (body: GenericRequestI) => Promise<CustomerAPIResponse<unknown>>;
+	};
+	ERPLY: {
+		generic: (body: GenericRequestI) => Promise<BaseRequestResponse<unknown>>;
+	};
+	CAFA: {
+		getConfiguration: (
+			user: UserI,
+			formData: any
+		) => Promise<CafaBaseResponse<any>>;
+		getConfigForApplication: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		deleteConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		getApplications: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		postConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+		putConfiguration: (
+			user: UserI,
+			content: any
+		) => Promise<CafaBaseResponse<any>>;
+	};
+}
