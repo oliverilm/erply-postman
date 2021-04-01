@@ -55,9 +55,7 @@ interface TimeI {
 
 const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const { clientCode, username, selected } = user;
-	const { setSelectedUser, updateUser, deleteUser } = useContext(
-		UsersListContext
-	);
+	const { setSelectedUser, updateUser } = useContext(UsersListContext);
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
@@ -118,70 +116,71 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	};
 
 	return (
-		<ListCard
-			className={`user-card ${selected ? 'selected' : ''}`}
-			onDoubleClick={selectUser}
-		>
-			<ListCardContent style={{ flex: 1, minHeight: '3em' }}>
-				<ListCardRow
-					style={{ alignItems: 'flex-start' }}
-					className={'user-card-detail'}
-				>
-					<div>
-						{clientCode} - {username}
-					</div>
-					<div>
-						{isAuthenticated() ? (
-							<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
-								timeTilEnd?.minutes
-							)}:${formatNr(timeTilEnd?.seconds)}`}</div>
-						) : (
-							<BlockIcon color="error" />
-						)}
-					</div>
-				</ListCardRow>
-				<ListCardRow
-					style={{ alignItems: 'flex-end' }}
-					className={'user-card-session'}
-				>
-					<div>
-						{user.credentials?.sessionKey.substr(0, 15) ?? 'xxxxxxxxxxxxxxx'}
-					</div>
-					<div
-						aria-controls="simple-menu"
-						aria-haspopup="true"
-						onClick={handleClick}
+		<>
+			<ListCard
+				className={`user-card ${selected ? 'selected' : ''}`}
+				onDoubleClick={selectUser}
+			>
+				<ListCardContent style={{ flex: 1, minHeight: '3em' }}>
+					<ListCardRow
+						style={{ alignItems: 'flex-start' }}
+						className={'user-card-detail'}
 					>
-						options &gt;
-					</div>
-					<Menu
-						id="simple-menu"
-						anchorEl={anchorEl}
-						keepMounted
-						open={Boolean(anchorEl)}
-						onClose={handleClose}
+						<div>
+							{clientCode} - {username}
+						</div>
+						<div>
+							{isAuthenticated() ? (
+								<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
+									timeTilEnd?.minutes
+								)}:${formatNr(timeTilEnd?.seconds)}`}</div>
+							) : (
+								<BlockIcon color="error" />
+							)}
+						</div>
+					</ListCardRow>
+					<ListCardRow
+						style={{ alignItems: 'flex-end' }}
+						className={'user-card-session'}
 					>
-						<MenuItem onClick={login}>Authenticate</MenuItem>
-						<MenuItem
-							onClick={() => {
-								setIsViewOpen(true);
-								handleClose();
-							}}
+						<div>
+							{user.credentials?.sessionKey.substr(0, 15) ?? 'xxxxxxxxxxxxxxx'}
+						</div>
+						<div
+							aria-controls="simple-menu"
+							aria-haspopup="true"
+							onClick={handleClick}
 						>
-							Profile Details
-						</MenuItem>
-						<MenuItem
-							onClick={() => {
-								handleClose();
-								generatePostmanProfile(user);
-							}}
+							options &gt;
+						</div>
+						<Menu
+							id="simple-menu"
+							anchorEl={anchorEl}
+							keepMounted
+							open={Boolean(anchorEl)}
+							onClose={handleClose}
 						>
-							Postman Profile
-						</MenuItem>
-					</Menu>
-				</ListCardRow>
-			</ListCardContent>
-
+							<MenuItem onClick={login}>Authenticate</MenuItem>
+							<MenuItem
+								onClick={() => {
+									setIsViewOpen(true);
+									handleClose();
+								}}
+							>
+								Profile Details
+							</MenuItem>
+							<MenuItem
+								onClick={() => {
+									handleClose();
+									generatePostmanProfile(user);
+								}}
+							>
+								Postman Profile
+							</MenuItem>
+						</Menu>
+					</ListCardRow>
+				</ListCardContent>
+			</ListCard>
 			<UserDetailModal
 				onClose={() => {
 					setIsViewOpen(false);
@@ -189,7 +188,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 				open={isViewOpen}
 				user={user}
 			/>
-		</ListCard>
+		</>
 	);
 };
 

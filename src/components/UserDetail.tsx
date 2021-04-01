@@ -35,23 +35,23 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 		handleClose();
 	};
 
-	const updateUsername = (value: string) => {
+	const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTempUser(() => {
-			tempUser.username = value;
+			tempUser.username = e.target.value;
 			return { ...tempUser };
 		});
 	};
 
-	const updatePassword = (value: string) => {
+	const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTempUser(() => {
-			tempUser.password = value;
+			tempUser.password = e.target.value;
 			return { ...tempUser };
 		});
 	};
 
-	const updateClientCode = (value: string) => {
+	const updateClientCode = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTempUser(() => {
-			tempUser.clientCode = value;
+			tempUser.clientCode = e.target.value;
 			return { ...tempUser };
 		});
 	};
@@ -109,9 +109,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 								{isEdit ? (
 									<TextField
 										value={tempUser.username}
-										onChange={(e) => {
-											updateUsername(e.target.value);
-										}}
+										onChange={updateUsername}
 									/>
 								) : (
 									tempUser.username
@@ -123,9 +121,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 							<td>
 								{isEdit ? (
 									<TextField
-										onChange={(e) => {
-											updateClientCode(e.target.value);
-										}}
+										onChange={updateClientCode}
 										value={tempUser.clientCode}
 									/>
 								) : (
@@ -138,9 +134,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 							<td>
 								{isEdit ? (
 									<TextField
-										onChange={(e) => {
-											updatePassword(e.target.value);
-										}}
+										onChange={updatePassword}
 										value={tempUser.password}
 									/>
 								) : (
