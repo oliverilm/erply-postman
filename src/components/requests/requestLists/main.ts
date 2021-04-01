@@ -9,5 +9,6 @@ export interface RequestJsonI {
 		type: 'select' | 'string' | 'number';
 		options?: string[];
 		helper?: string;
+		paramType: 'QUERY' | 'PATH' | 'BODY';
 	}[];
 }
