@@ -17,6 +17,11 @@ export interface PostmanProfileI {
 	_postman_exported_using: 'Postman/7.36.5';
 }
 
+/**
+ * Generates the extra fields for postman profile export.
+ * Feel free to add more fields if you require more data on your profile.
+ * @returns
+ */
 const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	if (!user) return [];
 
@@ -78,6 +83,10 @@ const generateValues = (user: UserI): PostmanProfileValueI[] => {
 	];
 };
 
+/**
+ * Creates a postman profile import file from the user data.
+ * make sure that the user has been authenticated before generating postman profile.
+ */
 export const generatePostmanProfile = (user: UserI): void => {
 	const fileName = `${user.clientCode}.postman_environment.json`;
 

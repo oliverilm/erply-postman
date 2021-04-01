@@ -16,7 +16,7 @@ const Col = styled.div`
 	flex-grow: 1;
 `;
 
-const RequestList = (): JSX.Element => {
+const RequestList: React.FC = (): JSX.Element => {
 	const [value, setValue] = useState(0);
 	const { usersList } = useContext(UsersListContext);
 	const [userSelected, setUserSelected] = useState<boolean>(false);
@@ -65,7 +65,6 @@ const RequestList = (): JSX.Element => {
 				aria-label="scrollable auto tabs example"
 			>
 				<Tab disabled={!userSelected} label="Erply API" {...a11yProps(0)} />
-
 				<Tab
 					disabled={!userSelected || !hasCRUrls}
 					label={'Customer MS'}

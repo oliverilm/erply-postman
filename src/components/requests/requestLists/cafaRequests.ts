@@ -25,6 +25,12 @@ export interface CafaRequestTemplateI {
 	value?: string;
 }
 
+const defaultRequest = {
+	endpoint: '',
+	method: '',
+	headers: [],
+};
+
 const mainFields: CafaRequestFieldI[] = [
 	{
 		name: 'application',
