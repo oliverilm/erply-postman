@@ -61,7 +61,6 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
-	const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -165,19 +164,11 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						<MenuItem onClick={login}>Authenticate</MenuItem>
 						<MenuItem
 							onClick={() => {
-								setIsEditOpen(true);
-								handleClose();
-							}}
-						>
-							Edit Profile
-						</MenuItem>
-						<MenuItem
-							onClick={() => {
 								setIsViewOpen(true);
 								handleClose();
 							}}
 						>
-							View Details
+							Profile Details
 						</MenuItem>
 						<MenuItem
 							onClick={() => {
@@ -197,14 +188,6 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 				}}
 				open={isViewOpen}
 				user={user}
-			/>
-			<UserDetailModal
-				onClose={() => {
-					setIsEditOpen(false);
-				}}
-				open={isEditOpen}
-				user={user}
-				edit={true}
 			/>
 		</ListCard>
 	);

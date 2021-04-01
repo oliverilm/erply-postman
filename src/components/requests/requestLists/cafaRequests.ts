@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserI } from '../../../@interfaces';
 import { CafaBaseResponse } from '../../../@interfaces/cafa';
 import api from '../../../api';
@@ -24,12 +25,6 @@ export interface CafaRequestTemplateI {
 	name?: string;
 	value?: string;
 }
-
-const defaultRequest = {
-	endpoint: '',
-	method: '',
-	headers: [],
-};
 
 const mainFields: CafaRequestFieldI[] = [
 	{
