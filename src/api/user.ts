@@ -3,7 +3,7 @@ import api from './index';
 
 export const defaultUser: UserI = {
 	selected: true,
-	id: 0,
+	id: '0',
 	clientCode: null,
 	sessionKey: null,
 	username: null,

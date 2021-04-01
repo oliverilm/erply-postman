@@ -57,7 +57,7 @@ export interface CredentialsI {
 }
 
 export interface UserI {
-	id: number;
+	id: string;
 	clientCode: string | null;
 	sessionKey: string | null;
 	username: string | null;

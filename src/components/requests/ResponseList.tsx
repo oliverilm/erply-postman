@@ -43,7 +43,7 @@ const ResponseList: React.FC = (): JSX.Element => {
 					dangerouslySetInnerHTML={{
 						__html: jsonDisplay.outputPretty(
 							JSON.stringify(
-								responses[0]?.response ?? {
+								responses[0]?.response.data ?? {
 									message: 'No requests done',
 								}
 							)

@@ -16,6 +16,8 @@ import {
 import BlockIcon from '@material-ui/icons/Block';
 import { Button } from './custom/Button';
 import { generatePostmanProfile } from './requests/scripts/postman';
+import UserDetailModal from './UserDetail';
+import { v4 as uuidv4 } from 'uuid';
 
 const ListCard = styled.div`
 	border-radius: 5px;
@@ -58,6 +60,8 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	);
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
+	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
+	const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -85,11 +89,6 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 
 	const isAuthenticated = () => {
 		return userManager.isAuthenticated();
-	};
-
-	const deleteThisUser = () => {
-		handleClose();
-		deleteUser(user);
 	};
 
 	const timeUntilAuthEnd = () => {
@@ -164,7 +163,22 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						onClose={handleClose}
 					>
 						<MenuItem onClick={login}>Authenticate</MenuItem>
-						<MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+						<MenuItem
+							onClick={() => {
+								setIsEditOpen(true);
+								handleClose();
+							}}
+						>
+							Edit Profile
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								setIsViewOpen(true);
+								handleClose();
+							}}
+						>
+							View Details
+						</MenuItem>
 						<MenuItem
 							onClick={() => {
 								handleClose();
@@ -173,11 +187,25 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 						>
 							Postman Profile
 						</MenuItem>
-						<MenuItem onClick={handleClose}>View Details</MenuItem>
-						<MenuItem onClick={deleteThisUser}>Delete</MenuItem>
 					</Menu>
 				</ListCardRow>
 			</ListCardContent>
+
+			<UserDetailModal
+				onClose={() => {
+					setIsViewOpen(false);
+				}}
+				open={isViewOpen}
+				user={user}
+			/>
+			<UserDetailModal
+				onClose={() => {
+					setIsEditOpen(false);
+				}}
+				open={isEditOpen}
+				user={user}
+				edit={true}
+			/>
 		</ListCard>
 	);
 };
@@ -201,19 +229,19 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 	const [clientCode, setClientCode] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [userName, setUserName] = useState<string>('');
-	const { usersList, addUser } = useContext(UsersListContext);
+	const { addUser } = useContext(UsersListContext);
 
 	const isValid = clientCode && userName && password;
 
 	const addNewUser = () => {
 		if (clientCode && userName && password) {
 			const newUser: UserI = {
-				id: usersList.length,
+				id: uuidv4(),
 				selected: true,
 				username: userName,
+				clientCode,
 				password,
 				sessionKey: null,
-				clientCode,
 				lastLogin: 0,
 				credentials: null,
 				endpoints: null,

@@ -30,6 +30,7 @@ const api: APIProps = {
 			clientCode,
 			username,
 			password,
+			sessionLength: '86400',
 		};
 		return erply.post(`https://${clientCode}.erply.com/api/`, body);
 	},

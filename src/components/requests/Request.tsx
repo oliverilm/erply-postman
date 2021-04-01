@@ -85,6 +85,7 @@ const Request: React.FC<Props> = ({
 								labelId={`${name}-label`}
 								id={`${name}-select`}
 								value={params[name]}
+								margin="dense"
 								onChange={(e) => {
 									change(name, e.target.value);
 								}}
@@ -101,6 +102,7 @@ const Request: React.FC<Props> = ({
 						<TextField
 							id={`${request}-${name}`}
 							label={name}
+							margin="dense"
 							required={required}
 							type={type}
 							style={{ width: 300 }}

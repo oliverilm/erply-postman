@@ -101,6 +101,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 						labelId={`${field.name}-label`}
 						id={`${field.name}-select`}
 						required={field.required}
+						margin="dense"
 						value={formState[field.name]}
 						onChange={(e) => {
 							change(field.name, e.target.value as string);
@@ -127,6 +128,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 						label={field.name}
 						required={field.required}
 						value={formState[field.name]}
+						margin="dense"
 						type={'number'}
 						style={{ width: 300 }}
 						onChange={(e) => {
@@ -146,6 +148,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 						id={`${request.request}-${field.name}`}
 						label={field.name}
 						required={field.required}
+						margin="dense"
 						value={formState[field.name]}
 						type={'text'}
 						style={{ width: 300 }}
