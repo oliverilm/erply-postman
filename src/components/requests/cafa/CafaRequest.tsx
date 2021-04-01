@@ -18,8 +18,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import React, { useContext, useState } from 'react';
 import { UserI } from '../../../@interfaces';
-import { CafaBaseResponse } from '../../../@interfaces/cafa';
-import api from '../../../api';
 import { ResponseContext } from '../../../context';
 import { CafaRequestFieldI, CafaRequestI } from '../requestLists/cafaRequests';
 
@@ -66,18 +64,13 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 		e.preventDefault();
 		console.log(formState);
 		const { apiFunction } = request;
-		const functionsList: {
-			[key: string]: (
-				user: UserI,
-				formData: { [key: string]: string }
-			) => Promise<CafaBaseResponse<unknown>>;
-		} = api.CAFA;
+
 		setIsLoading(true);
-		const response = await functionsList[apiFunction](user, formState);
+		const response = await apiFunction(user, formState);
 		console.log(response);
 		const responseObj = {
 			user,
-			request: apiFunction,
+			request: apiFunction.name,
 			time: +new Date() / 1000,
 			response: response,
 			error: true,
@@ -172,9 +165,27 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 	return (
 		<div className={classes.root}>
 			<form onSubmit={submit}>
-				<Accordion>
+				<Accordion
+					expanded={
+						request.fields && request.fields.length > 0 ? undefined : false
+					}
+				>
 					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
+						expandIcon={
+							request.fields && request.fields.length > 0 ? (
+								<ExpandMoreIcon />
+							) : (
+								<Button
+									disabled={!requestEnabled()}
+									size="small"
+									color="primary"
+									type={'submit'}
+									style={{ padding: 0, margin: 0 }}
+								>
+									Send Request
+								</Button>
+							)
+						}
 						aria-controls="panel1c-content"
 						id="panel1c-header"
 					>

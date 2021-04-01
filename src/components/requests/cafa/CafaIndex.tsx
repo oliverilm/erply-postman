@@ -61,11 +61,7 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 			.map((req) => {
 				if (currentUser !== undefined) {
 					return (
-						<CafaRequest
-							key={req.apiFunction}
-							request={req}
-							user={currentUser}
-						/>
+						<CafaRequest key={req.request} request={req} user={currentUser} />
 					);
 				}
 			});

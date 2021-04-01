@@ -160,9 +160,29 @@ const Request: React.FC<Props> = ({
 	return (
 		<div className={classes.root}>
 			<form onSubmit={sendRequest}>
-				<Accordion>
+				<Accordion
+					expanded={
+						requestObj.fields && requestObj.fields.length > 0
+							? undefined
+							: false
+					}
+				>
 					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
+						expandIcon={
+							requestObj.fields && requestObj.fields.length > 0 ? (
+								<ExpandMoreIcon />
+							) : (
+								<Button
+									disabled={!requestEnabled()}
+									size="small"
+									color="primary"
+									type={'submit'}
+									style={{ padding: 0, margin: 0 }}
+								>
+									Send Request
+								</Button>
+							)
+						}
 						aria-controls="panel1c-content"
 						id="panel1c-header"
 					>

@@ -104,25 +104,25 @@ const api: APIProps = {
 			user: UserI,
 			content: any
 		): Promise<CafaBaseResponse<any>> => {
-			return cafa.post('', content);
+			return cafa.get(`configuration/${content.applicationName}`);
 		},
 		deleteConfiguration: (
 			user: UserI,
 			content: any
 		): Promise<CafaBaseResponse<any>> => {
-			return cafa.post('', content);
+			return cafa.delete(getUrl('configuration', content));
 		},
 		postConfiguration: (
 			user: UserI,
 			content: any
 		): Promise<CafaBaseResponse<any>> => {
-			return cafa.post('', content);
+			return cafa.post('configuration', content);
 		},
 		putConfiguration: (
 			user: UserI,
 			content: any
 		): Promise<CafaBaseResponse<any>> => {
-			return cafa.post('', content);
+			return cafa.put('configuration', content);
 		},
 	},
 };

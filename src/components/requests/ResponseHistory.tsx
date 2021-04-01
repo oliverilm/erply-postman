@@ -40,26 +40,30 @@ const ResponseHistory: React.FC<ResponseHistoryProps> = (): JSX.Element => {
 	};
 
 	const handleResponseContentDisplay = (response: ResponseI) => {
-		if ('records' in response.response.data) {
-			// ERPLY API RESPONSE
-			if (response.error === false) {
-				return JSON.stringify(response.response.data.records).substr(0, 100);
-			}
-			// return response error message and or code
-			const errorCode = response.response.data.status.errorCode;
-			const errorMessage = translateError(errorCode);
+		try {
+			if ('records' in response.response.data) {
+				// ERPLY API RESPONSE
+				if (response.error === false) {
+					return JSON.stringify(response.response.data.records).substr(0, 100);
+				}
+				// return response error message and or code
+				const errorCode = response.response.data.status.errorCode;
+				const errorMessage = translateError(errorCode);
 
-			return `${errorCode} - ${errorMessage}`;
-		} else {
-			// CUSTOMER API RESPONSE
-			if (response.error === false) {
-				return JSON.stringify(response.response.data.result).substr(0, 100);
-			}
-			// return response error message and or code
+				return `${errorCode} - ${errorMessage}`;
+			} else {
+				// CUSTOMER API RESPONSE
+				if (response.error === false) {
+					return JSON.stringify(response.response.data.result).substr(0, 100);
+				}
+				// return response error message and or code
 
-			const errorCode = response.response.data.error?.code || '';
-			const errorMessage = response.response.data.error?.message || '';
-			return `${errorCode} - ${errorMessage}`;
+				const errorCode = response.response.data.error?.code || '';
+				const errorMessage = response.response.data.error?.message || '';
+				return `${errorCode} - ${errorMessage}`;
+			}
+		} catch (err) {
+			return 'asd-asd';
 		}
 	};
 

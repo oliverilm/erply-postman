@@ -1,3 +1,7 @@
+import { UserI } from '../../../@interfaces';
+import { CafaBaseResponse } from '../../../@interfaces/cafa';
+import api from '../../../api';
+
 export interface CafaRequestFieldI {
 	name: string;
 	type: 'select' | 'string' | 'number';
@@ -7,7 +11,7 @@ export interface CafaRequestFieldI {
 
 export interface CafaRequestI {
 	request: string;
-	apiFunction: string;
+	apiFunction: (user: UserI, formData: any) => Promise<CafaBaseResponse<any>>;
 	fields?: CafaRequestFieldI[];
 }
 
@@ -51,7 +55,7 @@ const mainFields: CafaRequestFieldI[] = [
 export const requestList: CafaRequestI[] = [
 	{
 		request: 'getConfiguration',
-		apiFunction: 'getConfiguration',
+		apiFunction: api.CAFA.getConfiguration,
 		fields: [
 			{
 				name: 'Look-Deeper',
@@ -64,7 +68,7 @@ export const requestList: CafaRequestI[] = [
 	},
 	{
 		request: 'putConfiguration',
-		apiFunction: 'putConfiguration',
+		apiFunction: api.CAFA.putConfiguration,
 		fields: [
 			...mainFields,
 			{
@@ -75,7 +79,7 @@ export const requestList: CafaRequestI[] = [
 	},
 	{
 		request: 'postConfiguration',
-		apiFunction: 'postConfiguration',
+		apiFunction: api.CAFA.postConfiguration,
 		fields: [
 			...mainFields,
 			{
@@ -87,16 +91,16 @@ export const requestList: CafaRequestI[] = [
 
 	{
 		request: 'getApplications',
-		apiFunction: 'getApplications',
+		apiFunction: api.CAFA.getApplications,
 	},
 	{
 		request: 'deleteConfiguration',
-		apiFunction: 'deleteConfiguration',
+		apiFunction: api.CAFA.deleteConfiguration,
 		fields: [...mainFields],
 	},
 	{
 		request: 'configForApplication',
-		apiFunction: 'getConfigForApplication',
+		apiFunction: api.CAFA.getConfigForApplication,
 		fields: [
 			{
 				name: 'applicationName',

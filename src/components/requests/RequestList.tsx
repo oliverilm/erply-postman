@@ -35,7 +35,6 @@ const RequestList = (): JSX.Element => {
 
 		if (selectedUser) {
 			setUserSelected(true);
-
 			const hasUrls = hasCustomerAPIAccess(selectedUser);
 			const hasCafa = hasCafaAccess(selectedUser);
 
