@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { RequestType } from '../../@types';
 import { RequestI } from './requestLists/erplyRequests';
 import Request from './Request';
+import Search from '../custom/Search';
 
 interface MainRequestProps {
 	apiField: string;
@@ -14,15 +15,6 @@ const Col = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-`;
-
-const Input = styled.input`
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 0.5em;
-	letter-spacing: 2px;
-	margin: 0.1em;
-	width: 300px;
 `;
 
 const MainRequest: React.FC<MainRequestProps> = ({
@@ -56,7 +48,12 @@ const MainRequest: React.FC<MainRequestProps> = ({
 	return (
 		<Col>
 			<div>
-				<Input type="text" placeholder="search..." onChange={search} />
+				<Search
+					placeholder="search..."
+					value={searchString}
+					onClear={() => setSearchString('')}
+					onChange={search}
+				/>
 			</div>
 			<div
 				style={{

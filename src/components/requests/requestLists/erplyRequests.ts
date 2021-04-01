@@ -132,4 +132,61 @@ export const requests: RequestI[] = [
 			{ name: 'forecastUnits', required: false, type: 'number' },
 		],
 	},
+	{
+		request: 'getProductsInSupplierPriceList',
+		title: 'Returns products that are on the supplier price list.',
+		fields: [
+			{ name: 'supplierPriceListID', required: true, type: 'number' },
+			{ name: 'pageNo', required: false, type: 'number' },
+			{ name: 'recordsOnPage', required: false, type: 'number' },
+		],
+	},
+	{
+		request: 'deleteProductsFromSupplierPriceList',
+		title: 'Delete products from the supplier price list.',
+		fields: [
+			{ name: 'supplierPriceListID', required: true, type: 'number' },
+			{ name: 'supplierPriceListProductIDs', required: true, type: 'string' },
+		],
+	},
+	{
+		request: 'addProductToSupplierPriceList',
+		title: 'Add a new row to a supplier price list.',
+		fields: [
+			{ name: 'supplierPriceListID', required: true, type: 'number' },
+			{ name: 'productID', required: true, type: 'number' },
+			{ name: 'price', required: true, type: 'number' },
+			{ name: 'amount', required: false, type: 'number' },
+			{ name: 'supplierCode', required: false, type: 'string' },
+			{ name: 'masterPackQuantity', required: false, type: 'number' },
+			{ name: 'minimumOrderQuantity', required: false, type: 'number' },
+			{ name: 'importCode', required: false, type: 'string' },
+			{ name: 'countryID	', required: false, type: 'number' },
+		],
+	},
+	{
+		request: 'getReasonCodes',
+		title: 'Get a list of reason codes.',
+		fields: [
+			{
+				name: 'purpose',
+				required: false,
+				type: 'select',
+				options: [
+					'WRITEOFF',
+					'RETURN',
+					'DISCOUNT',
+					'REGISTRATION',
+					'EOD_VARIANCE',
+					'TAX_EXEMPTION',
+					'CASH_IN',
+					'CASH_OUT',
+					'PROMOTION',
+					'PURCHASE',
+				],
+			},
+			{ name: 'recordsOnPage', required: false, type: 'number' },
+			{ name: 'pageNo', required: false, type: 'number' },
+		],
+	},
 ];

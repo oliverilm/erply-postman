@@ -72,3 +72,8 @@ button:focus {
     background-color: #f1c40f;
     color: black;
 }
+
+.clear-icon:hover {
+    transition: all .3s linear;
+    color: black
+}

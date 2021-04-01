@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../../../api';
 import { UsersListContext } from '../../../context';
+import Search from '../../custom/Search';
 import { CafaRequestI, requestList } from '../requestLists/cafaRequests';
 import CafaRequest from './CafaRequest';
 
@@ -11,15 +12,6 @@ const Col = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-`;
-
-const Input = styled.input`
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 0.5em;
-	letter-spacing: 2px;
-	margin: 0.1em;
-	width: 300px;
 `;
 
 const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
@@ -70,7 +62,12 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 	return (
 		<Col>
 			<div>
-				<Input type="text" placeholder="search..." onChange={search} />
+				<Search
+					placeholder="search..."
+					value={searchString}
+					onClear={() => setSearchString('')}
+					onChange={search}
+				/>
 			</div>
 			<div
 				style={{
