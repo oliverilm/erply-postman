@@ -4,6 +4,7 @@ import { RequestType } from '../../@types';
 import { RequestI } from './requestLists/erplyRequests';
 import Request from './Request';
 import Search from '../custom/Search';
+import PluginStorage from '../../api/storage';
 
 interface MainRequestProps {
 	apiField: string;
@@ -33,6 +34,13 @@ const MainRequest: React.FC<MainRequestProps> = ({
 			)
 			.sort((a, b) => {
 				return a.request.localeCompare(b.request);
+			})
+			.sort((a, b) => {
+				return PluginStorage.isFav(a.request) === PluginStorage.isFav(b.request)
+					? 0
+					: PluginStorage.isFav(a.request)
+					? -1
+					: 1;
 			})
 			.map((request) => {
 				return (
