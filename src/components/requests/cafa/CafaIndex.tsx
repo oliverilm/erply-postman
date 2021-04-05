@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../../../api';
-import { UsersListContext } from '../../../context';
+import { ResponseContext, UsersListContext } from '../../../context';
 import Search from '../../custom/Search';
 import { CafaRequestI, requestList } from '../requestLists/cafaRequests';
 import CafaRequest from './CafaRequest';
@@ -20,6 +20,7 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 		setSearchString(e.target.value);
 	};
 	const { usersList } = useContext(UsersListContext);
+	const { isLoading } = useContext(ResponseContext);
 
 	const [applications, setApplications] = useState<string[]>();
 	const currentUser = usersList.find((user) => user.selected);
@@ -30,7 +31,7 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 				setApplications(result.data.applications);
 			});
 		}
-	}, [usersList]);
+	}, [usersList, isLoading]);
 
 	const placeApplicationsData = (req: CafaRequestI): CafaRequestI => {
 		if (req.fields) {

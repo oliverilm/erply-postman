@@ -20,6 +20,7 @@ import React, { useContext, useState } from 'react';
 import { UserI } from '../../../@interfaces';
 import { ResponseContext } from '../../../context';
 import { CafaRequestFieldI, CafaRequestI } from '../requestLists/cafaRequests';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 interface CafaRequestProps {
 	request: CafaRequestI;
@@ -62,12 +63,10 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 	const submit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		// submit the filled form.
 		e.preventDefault();
-		console.log(formState);
 		const { apiFunction } = request;
 
 		setIsLoading(true);
 		const response = await apiFunction(user, formState);
-		console.log(response);
 		const responseObj = {
 			user,
 			request: apiFunction.name,
@@ -85,10 +84,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 		setFormState(state);
 	};
 
-	const generateFieldJSX = (
-		field: CafaRequestFieldI,
-		index: number
-	): JSX.Element => {
+	const generateFieldJSX = (field: CafaRequestFieldI, index: number) => {
 		if (field.type === 'select') {
 			return (
 				<div
@@ -134,6 +130,43 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 						onChange={(e) => {
 							change(field.name, e.target.value as string);
 						}}
+					/>
+				</div>
+			);
+		} else if (field.type === 'datalist') {
+			return (
+				<div
+					key={`${request.request}-${field.name}-${index}`}
+					style={{ marginTop: '.5em' }}
+				>
+					<Autocomplete
+						id={`combo-box-${field.name}-${index}-${request.request}`}
+						options={field.options || []}
+						getOptionLabel={(el) => el}
+						style={{ width: 300 }}
+						onChange={(
+							event: React.ChangeEvent<unknown>,
+							newValue: string | null
+						) => {
+							change(field.name, newValue || '');
+						}}
+						freeSolo
+						value={formState[field.name]}
+						inputValue={formState[field.name]}
+						onInputChange={(event, newValue) => {
+							change(field.name, newValue);
+						}}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								margin="dense"
+								label={field.name}
+								value={formState[field.name]}
+								onChange={(e) => {
+									change(field.name, e.target.value as string);
+								}}
+							/>
+						)}
 					/>
 				</div>
 			);

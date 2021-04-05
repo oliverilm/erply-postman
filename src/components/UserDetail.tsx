@@ -11,6 +11,7 @@ import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context';
 import CreateIcon from '@material-ui/icons/Create';
 import ClearIcon from '@material-ui/icons/Clear';
+import { Table, Tbody, Td, Tr } from './custom/Table';
 interface UserDetailProps {
 	edit?: boolean;
 	user: UserI;
@@ -36,6 +37,8 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
+		console.log(e.target.value);
 		setTempUser(() => {
 			tempUser.username = e.target.value;
 			return { ...tempUser };
@@ -43,6 +46,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
 		setTempUser(() => {
 			tempUser.password = e.target.value;
 			return { ...tempUser };
@@ -50,6 +54,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updateClientCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
 		setTempUser(() => {
 			tempUser.clientCode = e.target.value;
 			return { ...tempUser };
@@ -101,49 +106,49 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 				</div>
 			</DialogTitle>
 			<DialogContent>
-				<table>
-					<tbody>
-						<tr>
-							<td>username</td>
-							<td>
+				<Table>
+					<Tbody>
+						<Tr>
+							<Td>username</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										value={tempUser.username}
 										onChange={updateUsername}
 									/>
 								) : (
-									tempUser.username
+									<div>{tempUser.username}</div>
 								)}
-							</td>
-						</tr>
-						<tr>
-							<td>clientCode</td>
-							<td>
+							</Td>
+						</Tr>
+						<Tr>
+							<Td>clientCode</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										onChange={updateClientCode}
 										value={tempUser.clientCode}
 									/>
 								) : (
-									tempUser.clientCode
+									<div>{tempUser.clientCode}</div>
 								)}
-							</td>
-						</tr>
-						<tr>
-							<td>password</td>
-							<td>
+							</Td>
+						</Tr>
+						<Tr>
+							<Td>password</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										onChange={updatePassword}
 										value={tempUser.password}
 									/>
 								) : (
-									tempUser.password
+									<div>{tempUser.password}</div>
 								)}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							</Td>
+						</Tr>
+					</Tbody>
+				</Table>
 			</DialogContent>
 			<DialogActions>
 				{isEdit ? (

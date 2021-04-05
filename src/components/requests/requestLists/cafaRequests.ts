@@ -5,7 +5,7 @@ import api from '../../../api';
 
 export interface CafaRequestFieldI {
 	name: string;
-	type: 'select' | 'string' | 'number';
+	type: 'select' | 'string' | 'number' | 'datalist';
 	required?: boolean;
 	options?: string[];
 }
@@ -29,7 +29,7 @@ export interface CafaRequestTemplateI {
 const mainFields: CafaRequestFieldI[] = [
 	{
 		name: 'application',
-		type: 'select',
+		type: 'datalist',
 		required: true,
 		options: [], // will be populated after getApplications api call.
 	},
@@ -105,7 +105,7 @@ export const requestList: CafaRequestI[] = [
 		fields: [
 			{
 				name: 'applicationName',
-				type: 'select',
+				type: 'datalist',
 				required: true,
 				options: [], // to be filled by api request
 			},
