@@ -12,6 +12,7 @@ import { UsersListContext } from '../context';
 import CreateIcon from '@material-ui/icons/Create';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Table, Tbody, Td, Tr } from './custom/Table';
+import { jsonDisplay } from '../utils';
 interface UserDetailProps {
 	edit?: boolean;
 	user: UserI;
@@ -149,6 +150,17 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 						</Tr>
 					</Tbody>
 				</Table>
+				<pre
+					style={{ backgroundColor: '#fefefe' }}
+					dangerouslySetInnerHTML={{
+						__html: jsonDisplay.outputPretty(
+							JSON.stringify({
+								credentials: user.credentials,
+								endpoints: user.endpoints,
+							})
+						),
+					}}
+				></pre>
 			</DialogContent>
 			<DialogActions>
 				{isEdit ? (
