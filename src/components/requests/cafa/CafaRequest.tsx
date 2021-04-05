@@ -161,6 +161,7 @@ const CafaRequest: React.FC<CafaRequestProps> = ({
 								{...params}
 								margin="dense"
 								label={field.name}
+								required={field.required}
 								value={formState[field.name]}
 								onChange={(e) => {
 									change(field.name, e.target.value as string);
