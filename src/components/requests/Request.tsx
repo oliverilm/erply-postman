@@ -27,7 +27,7 @@ import PluginStorage from '../../api/storage';
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			marginTop: '1em',
+			marginTop: '.8em',
 			width: '98%',
 		},
 		heading: {

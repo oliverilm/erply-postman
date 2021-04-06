@@ -11,7 +11,6 @@ const Input = styled.input`
 	border-radius: 5px;
 	padding: 0.5em;
 	letter-spacing: 2px;
-	margin: 0.1em;
 	width: 300px;
 `;
 

@@ -15,6 +15,7 @@ const Row = styled.div`
 	flex: 1;
 	flex-direction: row;
 	max-width: 100vw;
+	max-height: 100vh;
 `;
 
 const App: React.FC = () => {
@@ -43,7 +44,7 @@ const App: React.FC = () => {
 		const list = usersList;
 		list.forEach((users) => (users.selected = false));
 
-		const correct = list.find((u) => u === user);
+		const correct = list.find((u) => u.id === user.id);
 		if (!correct) return;
 
 		correct.selected = true;

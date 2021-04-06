@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.MuiBox-root, .MuiBox-root-5 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}

@@ -272,9 +272,17 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 				</Typography>
 				<Divider />
 				<br />
-				{userList.map((user, index) => (
-					<UserListItem key={index} user={user} />
-				))}
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						height: '70vh',
+					}}
+				>
+					{userList.map((user, index) => (
+						<UserListItem key={index} user={user} />
+					))}
+				</div>
 			</div>
 			<div style={{ display: 'flex', justifyContent: 'center' }}>
 				<FormControl>

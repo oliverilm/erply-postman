@@ -66,13 +66,14 @@ const MainRequest: React.FC<MainRequestProps> = ({
 			<div
 				style={{
 					minWidth: 500,
-					minHeight: '82vh',
-					maxHeight: '82vh',
+					minHeight: '1vh',
+					maxHeight: '84vh',
 					overflowY: 'scroll',
 					overflowX: 'hidden',
 					marginTop: 10,
 				}}
 			>
+				{renderRequests()}
 				{renderRequests()}
 			</div>
 		</Col>

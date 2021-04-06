@@ -13,6 +13,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import ClearIcon from '@material-ui/icons/Clear';
 import { Table, Tbody, Td, Tr } from './custom/Table';
 import { jsonDisplay } from '../utils';
+
 interface UserDetailProps {
 	edit?: boolean;
 	user: UserI;
@@ -26,7 +27,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	edit = false,
 	user,
 }): JSX.Element => {
-	const { updateUser } = useContext(UsersListContext);
+	const { updateUser, deleteUser } = useContext(UsersListContext);
 	const [tempUser, setTempUser] = useState<UserI>({ ...user });
 	const [isEdit, setIsEdit] = useState(edit);
 
@@ -64,6 +65,11 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 
 	const handleClose = (): void => {
 		onClose && onClose();
+	};
+
+	const deleteThisUser = (): void => {
+		deleteUser(user);
+		handleClose();
 	};
 
 	return (
@@ -164,14 +170,28 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 			</DialogContent>
 			<DialogActions>
 				{isEdit ? (
-					<>
-						<Button onClick={handleClose} color="primary">
-							Cancel
-						</Button>
-						<Button onClick={update} color="primary">
-							Save
-						</Button>
-					</>
+					<div
+						style={{
+							width: '100%',
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+						}}
+					>
+						<div>
+							<Button onClick={deleteThisUser} color="primary">
+								Delete
+							</Button>
+						</div>
+						<div>
+							<Button onClick={handleClose} color="primary">
+								Cancel
+							</Button>
+							<Button onClick={update} color="primary">
+								Save
+							</Button>
+						</div>
+					</div>
 				) : (
 					<Button onClick={handleClose} color="primary">
 						Close

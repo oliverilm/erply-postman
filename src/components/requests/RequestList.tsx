@@ -14,6 +14,7 @@ const Col = styled.div`
 	width: 40vw;
 	min-width: 40vw;
 	flex-grow: 1;
+	max-height: 100vh;
 `;
 
 const RequestList: React.FC = (): JSX.Element => {
@@ -55,7 +56,6 @@ const RequestList: React.FC = (): JSX.Element => {
 	return (
 		<Col>
 			<Tabs
-				style={{ marginTop: '1em' }}
 				value={value}
 				onChange={handleChange}
 				indicatorColor="primary"
