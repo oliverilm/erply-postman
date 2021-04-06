@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { UserI } from '../@interfaces';
-import { UsersListContext } from '../context/index';
+import { ResponseContext, UsersListContext } from '../context/index';
 import './modalStyle.css';
 import UserManager from '../api/user';
 import {
@@ -59,6 +59,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
+	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -105,9 +106,19 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	};
 
 	const login = async () => {
+		setIsLoading(true);
+
 		handleClose();
-		const updatedUser = await userManager.login();
-		updateUser(updatedUser);
+		const { user, response } = await userManager.login();
+		addResponse({
+			request: 'verifyUser',
+			response,
+			error: response.data.status.errorCode > 0,
+			user,
+			time: +new Date() / 1000,
+		});
+		updateUser(user);
+		setIsLoading(false);
 	};
 
 	const formatNr = (nr: number | undefined) => {

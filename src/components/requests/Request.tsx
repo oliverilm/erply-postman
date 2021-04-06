@@ -210,7 +210,7 @@ const Request: React.FC<Props> = ({
 										e.preventDefault();
 										addToFavorites();
 									}}
-									style={{ color: isFavorite ? 'gold' : '' }}
+									style={{ color: isFavorite ? 'gold' : '#a1a1a1' }}
 								/>
 								{request}
 							</div>
