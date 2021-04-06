@@ -17,3 +17,11 @@ code {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
