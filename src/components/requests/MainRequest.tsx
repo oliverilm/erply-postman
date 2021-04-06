@@ -74,7 +74,6 @@ const MainRequest: React.FC<MainRequestProps> = ({
 				}}
 			>
 				{renderRequests()}
-				{renderRequests()}
 			</div>
 		</Col>
 	);
