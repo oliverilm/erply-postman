@@ -1,7 +1,11 @@
-/* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
-
+import {
+	createStyles,
+	ListItem,
+	ListItemText,
+	makeStyles,
+	Theme,
+} from '@material-ui/core';
+import React, { useState, useEffect, useContext } from 'react';
 import { UserI } from '../@interfaces';
 import { ResponseContext, UsersListContext } from '../context/index';
 import './modalStyle.css';
@@ -17,35 +21,22 @@ import {
 	MenuItem as ContextMenuItem,
 	ContextMenuTrigger,
 } from 'react-contextmenu';
-import UserGroups from './UserGroups';
 
-const ListCard = styled.div`
-	border-radius: 5px;
-	border: 1px solid #ccc;
-	margin: 0.3em 0.25em;
-	min-height: 2em;
-	width: 14em;
-`;
-
-const ListCardContent = styled.div`
-	padding: 0.5em;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-`;
-
-const ListCardRow = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	color: #c0c0c0;
-	font-size: 12px;
-`;
-
-interface ListItemProps {
+interface UserLinkProps {
 	user: UserI;
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {
+			width: '100%',
+			maxWidth: 360,
+		},
+		nested: {
+			paddingLeft: theme.spacing(4),
+		},
+	})
+);
 
 interface TimeI {
 	hours: number;
@@ -57,7 +48,9 @@ const attributes = {
 	className: 'custom-root',
 };
 
-const UserListItem: React.FC<ListItemProps> = ({ user }) => {
+export const UserLink: React.FC<UserLinkProps> = ({ user }): JSX.Element => {
+	const classes = useStyles();
+
 	const { clientCode, username, selected } = user;
 	const { setSelectedUser, updateUser } = useContext(UsersListContext);
 	const userManager = new UserManager(user);
@@ -119,10 +112,27 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 		return (nr ?? 0).toString().padStart(2, '0');
 	};
 
+	const getAuthStr = () => {
+		const hh = formatNr(timeTilEnd?.hours);
+		const mm = formatNr(timeTilEnd?.minutes);
+		const ss = formatNr(timeTilEnd?.seconds);
+		return isAuthenticated() ? `${hh}:${mm}:${ss}` : 'xx:xx:xx';
+	};
+
 	return (
 		<>
 			<ContextMenuTrigger id={`user-custom-context-${user.id}`}>
-				<ListCard
+				<ListItem
+					style={{ cursor: 'pointer' }}
+					divider
+					className={classes.nested}
+				>
+					<ListItemText
+						style={{ color: isAuthenticated() ? '##2ecc71' : '#ccc' }}
+						secondary={`${user.clientCode} - ${user.username} ${getAuthStr()}`}
+					/>
+				</ListItem>
+				{/* <ListCard
 					className={`user-card ${selected ? 'selected' : ''}`}
 					onDoubleClick={selectUser}
 				>
@@ -145,7 +155,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 							</div>
 						</ListCardRow>
 					</ListCardContent>
-				</ListCard>
+				</ListCard> */}
 			</ContextMenuTrigger>
 			<ContextMenu id={`user-custom-context-${user.id}`}>
 				<ContextMenuItem
@@ -194,150 +204,5 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 				user={user}
 			/>
 		</>
-	);
-};
-
-interface UserListProps {
-	userList: UserI[];
-}
-
-const Input = styled.input`
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 0.5em;
-	letter-spacing: 2px;
-	margin: 0.1em;
-	text-align: center;
-	width: 200px;
-	margin-bottom: 0.3em;
-`;
-
-export const UserList: React.FC<UserListProps> = ({ userList }) => {
-	const [clientCode, setClientCode] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [userName, setUserName] = useState<string>('');
-	const { addUser } = useContext(UsersListContext);
-
-	const isValid = clientCode && userName && password;
-
-	const addNewUser = () => {
-		if (clientCode && userName && password) {
-			const newUser: UserI = {
-				id: uuidv4(),
-				selected: true,
-				username: userName,
-				clientCode,
-				password,
-				sessionKey: null,
-				lastLogin: 0,
-				credentials: null,
-				endpoints: null,
-			};
-			addUser(newUser);
-		}
-	};
-
-	const changeUsername = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		setUserName(e?.target.value || '');
-	};
-
-	const changePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setPassword(e?.target.value || '');
-	};
-
-	const changeClientcode = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setClientCode(e?.target.value || '');
-	};
-
-	/**
-	 * TODO: move this somewhere out of the component
-	 */
-	const getGroupedAccounts = (): { [key: string]: UserI[] } => {
-		const groups: { [key: string]: UserI[] } = {};
-
-		userList.forEach((user) => {
-			if (!user.company || user.company === '') {
-				if (groups.general) {
-					groups.general.push(user);
-				} else {
-					groups.general = [user];
-				}
-			} else {
-				if (groups[user.company]) {
-					groups[user.company].push(user);
-				} else {
-					groups[user.company] = [user];
-				}
-			}
-		});
-		console.log(groups);
-		return groups;
-	};
-
-	return (
-		<div
-			style={{
-				padding: '1em',
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'space-between',
-				borderRight: '1px solid #ccc',
-				marginRight: '1em',
-			}}
-		>
-			<div>
-				<Typography component={'span'} variant="h6">
-					Profiles
-				</Typography>
-				<Divider />
-				<br />
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						height: '70vh',
-					}}
-				>
-					<UserGroups groups={getGroupedAccounts()} />
-					{/* {userList.map((user, index) => (
-						<UserListItem key={index} user={user} />
-					))} */}
-				</div>
-			</div>
-			<div style={{ display: 'flex', justifyContent: 'center' }}>
-				<FormControl>
-					<Input
-						required
-						type="text"
-						onChange={changeClientcode}
-						placeholder="clientCode"
-					/>
-					<Input
-						required
-						type="text"
-						onChange={changeUsername}
-						placeholder="username"
-					/>
-					<Input
-						type="password"
-						required
-						onChange={changePassword}
-						placeholder="password"
-					/>
-
-					<Button
-						style={{
-							cursor: isValid ? 'pointer' : 'not-allowed',
-							pointerEvents: isValid ? 'all' : 'none',
-						}}
-						type={'submit'}
-						variant={!isValid ? 'error' : 'primary'}
-						onClick={addNewUser}
-					>
-						{isValid ? 'Add user' : 'Please fill all fields'}
-					</Button>
-				</FormControl>
-			</div>
-		</div>
 	);
 };
