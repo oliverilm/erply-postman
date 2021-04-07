@@ -64,6 +64,7 @@ export interface UserI {
 	password: string | null;
 	selected: boolean;
 	lastLogin: number;
+	company?: string;
 	credentials: CredentialsI | null;
 	endpoints: ServiceEndpointsI | null;
 }

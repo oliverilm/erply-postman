@@ -9,10 +9,6 @@ import {
 	makeStyles,
 	createStyles,
 	Theme,
-	TextField,
-	InputLabel,
-	MenuItem,
-	Select,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { useContext, useState } from 'react';
@@ -23,6 +19,8 @@ import { ResponseContext, UsersListContext } from '../../context';
 import { RequestI } from './requestLists/erplyRequests';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import PluginStorage from '../../api/storage';
+import Select from '../custom/inputs/Select';
+import Text from '../custom/inputs/Text';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -82,36 +80,21 @@ const Request: React.FC<Props> = ({
 			return (
 				<div key={`${request}-${name}`} style={{ marginTop: '.5em' }}>
 					{type === 'select' ? (
-						<>
-							<InputLabel id={`${name}-label`}>{name}</InputLabel>
-							<Select
-								style={{ width: 300 }}
-								labelId={`${name}-label`}
-								id={`${name}-select`}
-								value={params[name]}
-								margin="dense"
-								onChange={(e) => {
-									change(name, e.target.value);
-								}}
-							>
-								<MenuItem value={''}></MenuItem>
-								{options?.map((op) => (
-									<MenuItem key={`${op}-${name}`} value={op}>
-										{op}
-									</MenuItem>
-								))}
-							</Select>
-						</>
-					) : (
-						<TextField
-							id={`${request}-${name}`}
+						<Select
+							options={options || []}
 							label={name}
-							margin="dense"
+							value={params[name] as string}
+							change={(value) => {
+								change(name, value);
+							}}
+						/>
+					) : (
+						<Text
 							required={required}
-							type={type}
-							style={{ width: 300 }}
-							onChange={(e) => {
-								change(name, e.target.value);
+							label={name}
+							value={params[name] as string}
+							change={(value) => {
+								change(name, value);
 							}}
 						/>
 					)}

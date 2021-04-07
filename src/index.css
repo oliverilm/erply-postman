@@ -19,10 +19,12 @@ code {
 }
 
 ::-webkit-scrollbar {
-  width: 1px;
+  width: 3px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #f1c40f; 
+  width: 50px !important;
+  height: 50px !important;
 }

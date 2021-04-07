@@ -189,4 +189,27 @@ export const requests: RequestI[] = [
 			{ name: 'pageNo', required: false, type: 'number' },
 		],
 	},
+	{
+		request: 'getProductCategories',
+		title: 'Retrieve the list of product categories.',
+		fields: [
+			{ name: 'parentCategoryID', required: false, type: 'number' },
+			{ name: 'searchAttributeName', required: false, type: 'string' },
+			{ name: 'searchAttributeValue', required: false, type: 'string' },
+			{ name: 'recordsOnPage', required: false, type: 'number' },
+			{ name: 'pageNo', required: false, type: 'number' },
+		],
+	},
+	{
+		request: 'deleteProduct',
+		title:
+			'Delete a product. Products that have any number of transactions associated with them (sales, purchases or inventory) cannot be deleted; API returns error 1063. Instead, we always recommend to archive the product — setting its status to "ARCHIVED".',
+		fields: [{ name: 'productID', required: true, type: 'number' }],
+	},
+	{
+		request: 'deleteProductGroup',
+		title:
+			'Delete a product group. Note that products belonging to this group, as well as subgroups, will NOT be deleted or recategorized.',
+		fields: [{ name: 'productGroupID', required: true, type: 'number' }],
+	},
 ];

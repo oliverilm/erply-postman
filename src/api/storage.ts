@@ -53,6 +53,14 @@ class PluginStorage {
 	isFav(name: string): boolean {
 		return this.getFavs().includes(name);
 	}
+
+	companySelection(): string[] {
+		const usersList = this.getUsers();
+		const cList = usersList
+			.map((user) => (user.company ? user.company : ''))
+			.filter((c) => c !== '');
+		return cList;
+	}
 }
 
 export default new PluginStorage();

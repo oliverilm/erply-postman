@@ -14,7 +14,7 @@ import UserDetailModal from './UserDetail';
 import { v4 as uuidv4 } from 'uuid';
 import {
 	ContextMenu,
-	MenuItem as ContextManuItem,
+	MenuItem as ContextMenuItem,
 	ContextMenuTrigger,
 } from 'react-contextmenu';
 
@@ -54,9 +54,6 @@ interface TimeI {
 
 const attributes = {
 	className: 'custom-root',
-	disabledClassName: 'custom-disabled',
-	dividerClassName: 'custom-divider',
-	selectedClassName: 'custom-selected',
 };
 
 const UserListItem: React.FC<ListItemProps> = ({ user }) => {
@@ -146,38 +143,29 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 								)}
 							</div>
 						</ListCardRow>
-						{/* <ListCardRow
-							style={{ alignItems: 'flex-end' }}
-							className={'user-card-session'}
-						>
-							<div>
-								{user.credentials?.sessionKey.substr(0, 15) ??
-									'xxxxxxxxxxxxxxx'}
-							</div>
-						</ListCardRow> */}
 					</ListCardContent>
 				</ListCard>
 			</ContextMenuTrigger>
 			<ContextMenu id={`user-custom-context-${user.id}`}>
-				<ContextManuItem
+				<ContextMenuItem
 					data={{ action: 'copy' }}
 					onClick={login}
 					attributes={attributes}
 				>
 					Authenticate
-				</ContextManuItem>
+				</ContextMenuItem>
 
-				<ContextManuItem divider />
+				<ContextMenuItem divider />
 
-				<ContextManuItem
+				<ContextMenuItem
 					data={{ action: 'paste' }}
 					onClick={selectUser}
 					attributes={attributes}
 				>
 					Select User
-				</ContextManuItem>
+				</ContextMenuItem>
 
-				<ContextManuItem
+				<ContextMenuItem
 					data={{ action: 'paste' }}
 					onClick={() => {
 						setIsViewOpen(true);
@@ -185,9 +173,9 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 					attributes={attributes}
 				>
 					User Details
-				</ContextManuItem>
-				<ContextManuItem divider />
-				<ContextManuItem
+				</ContextMenuItem>
+				<ContextMenuItem divider />
+				<ContextMenuItem
 					data={{ action: 'delete' }}
 					onClick={() => {
 						generatePostmanProfile(user);
@@ -195,7 +183,7 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 					attributes={attributes}
 				>
 					Postman Profile
-				</ContextManuItem>
+				</ContextMenuItem>
 			</ContextMenu>
 			<UserDetailModal
 				onClose={() => {
@@ -292,16 +280,24 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 			<div style={{ display: 'flex', justifyContent: 'center' }}>
 				<FormControl>
 					<Input
+						required
 						type="text"
 						onChange={changeClientcode}
 						placeholder="clientCode"
 					/>
-					<Input type="text" onChange={changeUsername} placeholder="username" />
+					<Input
+						required
+						type="text"
+						onChange={changeUsername}
+						placeholder="username"
+					/>
 					<Input
 						type="password"
+						required
 						onChange={changePassword}
 						placeholder="password"
 					/>
+
 					<Button
 						style={{
 							cursor: isValid ? 'pointer' : 'not-allowed',
