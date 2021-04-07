@@ -16,10 +16,7 @@ const Col = styled.div`
 
 const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 	const [searchString, setSearchString] = useState('');
-	const search = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearchString(e.target.value);
-	};
-	const { usersList } = useContext(UsersListContext);
+	const { usersList, selectedUser } = useContext(UsersListContext);
 	const { isLoading } = useContext(ResponseContext);
 
 	const [applications, setApplications] = useState<string[]>();
@@ -31,7 +28,11 @@ const CafaIndex: React.FC<CafaIndexProps> = (): JSX.Element => {
 				setApplications(result.data.applications);
 			});
 		}
-	}, [usersList, isLoading]);
+	}, [usersList, selectedUser, isLoading]);
+
+	const search = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchString(e.target.value);
+	};
 
 	const placeApplicationsData = (req: CafaRequestI): CafaRequestI => {
 		if (req.fields) {

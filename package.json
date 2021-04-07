@@ -57,6 +57,7 @@
 		"prettier": "^2.0.5",
 		"react": "^16.13.1",
 		"react-app-polyfill": "^1.0.6",
+		"react-contextmenu": "^2.14.0",
 		"react-dev-utils": "^10.2.1",
 		"react-dom": "^16.13.1",
 		"react-json-view": "^1.21.3",

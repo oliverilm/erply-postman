@@ -17,7 +17,7 @@ export const addHeaders = (user: UserI): void => {
 	cafa.defaults.headers.common['sessionKey'] =
 		user.credentials?.sessionKey || '';
 	cafa.defaults.headers.common['clientCode'] = user.clientCode;
-	cafa.defaults.baseURL = user.endpoints?.cafa.url || '';
+	cafa.defaults.baseURL = user.endpoints?.cafa?.url || '';
 };
 
 export const getUrl = (url: string, content: any): string => {

@@ -11,7 +11,7 @@ export const hasCafaAccess = (user: UserI): boolean => {
 
 export const hasCustomerAPIAccess = (user: UserI): boolean => {
 	if (user.credentials) {
-		if (user.credentials.couponRegistryURLs.length > 0) {
+		if (user.credentials.customerRegistryURLs.length > 0) {
 			return true;
 		}
 	}
