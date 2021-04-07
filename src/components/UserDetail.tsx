@@ -184,12 +184,6 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 										options={PluginStorage.companySelection() || []}
 										getOptionLabel={(el) => el}
 										style={{ width: 300 }}
-										onChange={(
-											e: React.ChangeEvent<unknown>,
-											newVal: string | null
-										) => {
-											updateCompany(newVal || '');
-										}}
 										freeSolo
 										value={tempUser.company || ''}
 										inputValue={tempUser.company || ''}
