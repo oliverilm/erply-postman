@@ -5,7 +5,7 @@ class PluginStorage {
 		const jsonString = localStorage.getItem(val);
 		return jsonString ? JSON.parse(jsonString) : [];
 	}
-	set(name: string, val: any): void {
+	set(name: string, val: unknown): void {
 		const json = JSON.stringify(val);
 		localStorage.setItem(name, json);
 	}

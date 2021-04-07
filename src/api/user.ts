@@ -37,7 +37,10 @@ export default class UserManager {
 		);
 	}
 
-	async login(): Promise<{ user: UserI; response: BaseRequestResponse<any> }> {
+	async login(): Promise<{
+		user: UserI;
+		response: BaseRequestResponse<unknown>;
+	}> {
 		const result = await api.verifyUser(this.user);
 		const serviceEndpoints = await api.getServiceEndpoints(this.user);
 
