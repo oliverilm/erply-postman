@@ -4,15 +4,28 @@ import {
 	DialogContent,
 	TextField,
 	DialogActions,
+	Table,
 	Button,
+	TableBody,
+	TableCell,
+	TableRow,
+	makeStyles,
 } from '@material-ui/core';
 import React, { useState, useContext } from 'react';
 import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context';
 import CreateIcon from '@material-ui/icons/Create';
 import ClearIcon from '@material-ui/icons/Clear';
-import { Table, Tbody, Td, Tr } from './custom/Table';
 import { jsonDisplay } from '../utils';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import PluginStorage from '../api/storage';
+
+const useStyles = makeStyles({
+	table: {
+		minWidth: '50%',
+		maxWidth: 400,
+	},
+});
 
 interface UserDetailProps {
 	edit?: boolean;
@@ -30,7 +43,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	const { updateUser, deleteUser } = useContext(UsersListContext);
 	const [tempUser, setTempUser] = useState<UserI>({ ...user });
 	const [isEdit, setIsEdit] = useState(edit);
-
+	const classes = useStyles();
 	const update = () => {
 		// update user
 		updateUser(tempUser);
@@ -70,6 +83,14 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	const deleteThisUser = (): void => {
 		deleteUser(user);
 		handleClose();
+	};
+
+	const updateCompany = (e: string) => {
+		// update user company
+		setTempUser(() => {
+			tempUser.company = e;
+			return { ...tempUser };
+		});
 	};
 
 	return (
@@ -113,7 +134,91 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 				</div>
 			</DialogTitle>
 			<DialogContent>
-				<Table>
+				<Table className={classes.table} aria-label="simple table">
+					<TableBody>
+						<TableRow>
+							<TableCell>Username</TableCell>
+							<TableCell align="left">
+								{isEdit ? (
+									<TextField
+										value={tempUser.username}
+										onChange={updateUsername}
+									/>
+								) : (
+									tempUser.username
+								)}
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell>Client Code</TableCell>
+							<TableCell align="left">
+								{isEdit ? (
+									<TextField
+										value={tempUser.clientCode}
+										onChange={updateClientCode}
+									/>
+								) : (
+									tempUser.clientCode
+								)}
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell>Password</TableCell>
+							<TableCell align="left">
+								{isEdit ? (
+									<TextField
+										value={tempUser.password}
+										onChange={updatePassword}
+									/>
+								) : (
+									tempUser.password
+								)}
+							</TableCell>
+						</TableRow>
+
+						<TableRow>
+							<TableCell>Company</TableCell>
+							<TableCell align="left">
+								{isEdit ? (
+									<Autocomplete
+										options={PluginStorage.companySelection() || []}
+										getOptionLabel={(el) => el}
+										style={{ width: 300 }}
+										onChange={(
+											e: React.ChangeEvent<unknown>,
+											newVal: string | null
+										) => {
+											updateCompany(newVal || '');
+										}}
+										freeSolo
+										value={tempUser.company || ''}
+										inputValue={tempUser.company || ''}
+										onInputChange={(e, newVal) => {
+											updateCompany(newVal);
+										}}
+										renderInput={(params) => (
+											<TextField
+												{...params}
+												margin="dense"
+												label={'Company'}
+												value={tempUser.company || ''}
+												onChange={(e) => {
+													updateCompany(e.target.value);
+												}}
+											/>
+										)}
+									/>
+								) : tempUser.company ? (
+									tempUser.company
+								) : (
+									'No company'
+								)}
+							</TableCell>
+						</TableRow>
+					</TableBody>
+				</Table>
+
+				{/* <Table>
 					<Tbody>
 						<Tr>
 							<Td>username</Td>
@@ -155,7 +260,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 							</Td>
 						</Tr>
 					</Tbody>
-				</Table>
+				</Table> */}
 				<pre
 					style={{ backgroundColor: '#fefefe' }}
 					dangerouslySetInnerHTML={{

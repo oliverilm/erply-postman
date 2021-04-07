@@ -56,9 +56,13 @@ class PluginStorage {
 
 	companySelection(): string[] {
 		const usersList = this.getUsers();
-		const cList = usersList
-			.map((user) => (user.company ? user.company : ''))
-			.filter((c) => c !== '');
+		const cList = Array.from(
+			new Set(
+				usersList
+					.map((user) => (user.company ? user.company : ''))
+					.filter((c) => c !== '')
+			)
+		);
 		return cList;
 	}
 }
