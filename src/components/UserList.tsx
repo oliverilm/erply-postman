@@ -3,27 +3,26 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { UserI } from '../@interfaces';
-import { UsersListContext } from '../context/index';
+import { ResponseContext, UsersListContext } from '../context/index';
 import './modalStyle.css';
 import UserManager from '../api/user';
-import {
-	Divider,
-	FormControl,
-	Menu,
-	MenuItem,
-	Typography,
-} from '@material-ui/core';
+import { Divider, FormControl, Typography } from '@material-ui/core';
 import BlockIcon from '@material-ui/icons/Block';
 import { Button } from './custom/Button';
 import { generatePostmanProfile } from './requests/scripts/postman';
 import UserDetailModal from './UserDetail';
 import { v4 as uuidv4 } from 'uuid';
+import {
+	ContextMenu,
+	MenuItem as ContextManuItem,
+	ContextMenuTrigger,
+} from 'react-contextmenu';
 
 const ListCard = styled.div`
 	border-radius: 5px;
 	border: 1px solid #ccc;
-	margin: 0.5em 0.25em;
-	min-height: 4em;
+	margin: 0.3em 0.25em;
+	min-height: 2em;
 	width: 14em;
 `;
 
@@ -53,12 +52,20 @@ interface TimeI {
 	seconds: number;
 }
 
+const attributes = {
+	className: 'custom-root',
+	disabledClassName: 'custom-disabled',
+	dividerClassName: 'custom-divider',
+	selectedClassName: 'custom-selected',
+};
+
 const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	const { clientCode, username, selected } = user;
 	const { setSelectedUser, updateUser } = useContext(UsersListContext);
 	const userManager = new UserManager(user);
 	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
 	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
+	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -70,18 +77,8 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 		};
 	}, [user]);
 
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-	const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-		setAnchorEl(event.currentTarget);
-	};
-
 	const selectUser = () => {
 		setSelectedUser(user);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
 	};
 
 	const isAuthenticated = () => {
@@ -105,9 +102,18 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 	};
 
 	const login = async () => {
-		handleClose();
-		const updatedUser = await userManager.login();
-		updateUser(updatedUser);
+		setIsLoading(true);
+
+		const { user, response } = await userManager.login();
+		addResponse({
+			request: 'verifyUser',
+			response,
+			error: response.data.status.errorCode > 0,
+			user,
+			time: +new Date() / 1000,
+		});
+		updateUser(user);
+		setIsLoading(false);
 	};
 
 	const formatNr = (nr: number | undefined) => {
@@ -117,70 +123,80 @@ const UserListItem: React.FC<ListItemProps> = ({ user }) => {
 
 	return (
 		<>
-			<ListCard
-				className={`user-card ${selected ? 'selected' : ''}`}
-				onDoubleClick={selectUser}
-			>
-				<ListCardContent style={{ flex: 1, minHeight: '3em' }}>
-					<ListCardRow
-						style={{ alignItems: 'flex-start' }}
-						className={'user-card-detail'}
-					>
-						<div>
-							{clientCode} - {username}
-						</div>
-						<div>
-							{isAuthenticated() ? (
-								<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
-									timeTilEnd?.minutes
-								)}:${formatNr(timeTilEnd?.seconds)}`}</div>
-							) : (
-								<BlockIcon color="error" />
-							)}
-						</div>
-					</ListCardRow>
-					<ListCardRow
-						style={{ alignItems: 'flex-end' }}
-						className={'user-card-session'}
-					>
-						<div>
-							{user.credentials?.sessionKey.substr(0, 15) ?? 'xxxxxxxxxxxxxxx'}
-						</div>
-						<div
-							aria-controls="simple-menu"
-							aria-haspopup="true"
-							onClick={handleClick}
+			<ContextMenuTrigger id={`user-custom-context-${user.id}`}>
+				<ListCard
+					className={`user-card ${selected ? 'selected' : ''}`}
+					onDoubleClick={selectUser}
+				>
+					<ListCardContent style={{ flex: 1, minHeight: '2em' }}>
+						<ListCardRow
+							style={{ alignItems: 'flex-start' }}
+							className={'user-card-detail'}
 						>
-							options &gt;
-						</div>
-						<Menu
-							id="simple-menu"
-							anchorEl={anchorEl}
-							keepMounted
-							open={Boolean(anchorEl)}
-							onClose={handleClose}
+							<div>
+								{clientCode} - {username}
+							</div>
+							<div>
+								{isAuthenticated() ? (
+									<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
+										timeTilEnd?.minutes
+									)}:${formatNr(timeTilEnd?.seconds)}`}</div>
+								) : (
+									<BlockIcon color="error" />
+								)}
+							</div>
+						</ListCardRow>
+						{/* <ListCardRow
+							style={{ alignItems: 'flex-end' }}
+							className={'user-card-session'}
 						>
-							<MenuItem onClick={login}>Authenticate</MenuItem>
-							<MenuItem
-								onClick={() => {
-									setIsViewOpen(true);
-									handleClose();
-								}}
-							>
-								Profile Details
-							</MenuItem>
-							<MenuItem
-								onClick={() => {
-									handleClose();
-									generatePostmanProfile(user);
-								}}
-							>
-								Postman Profile
-							</MenuItem>
-						</Menu>
-					</ListCardRow>
-				</ListCardContent>
-			</ListCard>
+							<div>
+								{user.credentials?.sessionKey.substr(0, 15) ??
+									'xxxxxxxxxxxxxxx'}
+							</div>
+						</ListCardRow> */}
+					</ListCardContent>
+				</ListCard>
+			</ContextMenuTrigger>
+			<ContextMenu id={`user-custom-context-${user.id}`}>
+				<ContextManuItem
+					data={{ action: 'copy' }}
+					onClick={login}
+					attributes={attributes}
+				>
+					Authenticate
+				</ContextManuItem>
+
+				<ContextManuItem divider />
+
+				<ContextManuItem
+					data={{ action: 'paste' }}
+					onClick={selectUser}
+					attributes={attributes}
+				>
+					Select User
+				</ContextManuItem>
+
+				<ContextManuItem
+					data={{ action: 'paste' }}
+					onClick={() => {
+						setIsViewOpen(true);
+					}}
+					attributes={attributes}
+				>
+					User Details
+				</ContextManuItem>
+				<ContextManuItem divider />
+				<ContextManuItem
+					data={{ action: 'delete' }}
+					onClick={() => {
+						generatePostmanProfile(user);
+					}}
+					attributes={attributes}
+				>
+					Postman Profile
+				</ContextManuItem>
+			</ContextMenu>
 			<UserDetailModal
 				onClose={() => {
 					setIsViewOpen(false);
@@ -261,9 +277,17 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 				</Typography>
 				<Divider />
 				<br />
-				{userList.map((user, index) => (
-					<UserListItem key={index} user={user} />
-				))}
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						height: '70vh',
+					}}
+				>
+					{userList.map((user, index) => (
+						<UserListItem key={index} user={user} />
+					))}
+				</div>
 			</div>
 			<div style={{ display: 'flex', justifyContent: 'center' }}>
 				<FormControl>

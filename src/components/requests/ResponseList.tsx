@@ -2,28 +2,28 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ResponseContext } from '../../context';
 import './json.css';
-import { jsonDisplay } from '../../utils';
+// import { jsonDisplay } from '../../utils';
 import { CircularProgress } from '@material-ui/core';
 import ResponseHistory from './ResponseHistory';
+import ReactJson from 'react-json-view';
 
 const Responses = styled.div`
 	background-color: #34495e;
 	width: 100%;
-	min-height: 90vh;
-	max-height: 90vh;
-	margin: 1.5em;
+	min-height: 95vh;
+	max-height: 95vh;
+	margin: 1em;
 	color: white;
-	padding: 1em;
 	overflow-y: scroll;
 	text-wrap: wrap;
 	overflow-x: hidden;
-	word-wrap: break-word;
 `;
 
 const ListOfPastResponses = styled.div`
 	position: absolute;
-	top: 40px;
-	right: 60px;
+	top: 20px;
+	z-index: 1000;
+	right: 40px;
 `;
 
 const ResponseList: React.FC = (): JSX.Element => {
@@ -37,19 +37,32 @@ const ResponseList: React.FC = (): JSX.Element => {
 				</ListOfPastResponses>
 			)}
 			{isLoading ? (
-				<CircularProgress style={{ color: '#fff' }} />
+				<CircularProgress style={{ color: '#000', zIndex: 10000 }} />
 			) : (
-				<pre
-					dangerouslySetInnerHTML={{
-						__html: jsonDisplay.outputPretty(
-							JSON.stringify(
-								responses[0]?.response.data ?? {
-									message: 'No requests done',
-								}
-							)
-						),
-					}}
-				></pre>
+				<ReactJson
+					theme="ocean"
+					style={{ margin: 0, padding: '2em', minHeight: '100%' }}
+					displayObjectSize={false}
+					indentWidth={2}
+					displayDataTypes={false}
+					src={
+						responses[0]?.response.data ?? {
+							message: 'No requests done',
+						}
+					}
+				/>
+
+				// <pre
+				// 	dangerouslySetInnerHTML={{
+				// 		__html: jsonDisplay.outputPretty(
+				// 			JSON.stringify(
+				// 				responses[0]?.response.data ?? {
+				// 					message: 'No requests done',
+				// 				}
+				// 			)
+				// 		),
+				// 	}}
+				// ></pre>
 			)}
 		</Responses>
 	);

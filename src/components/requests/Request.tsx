@@ -21,11 +21,14 @@ import { RequestType } from '../../@types';
 import api from '../../api';
 import { ResponseContext, UsersListContext } from '../../context';
 import { RequestI } from './requestLists/erplyRequests';
+import StarRateIcon from '@material-ui/icons/StarRate';
+import PluginStorage from '../../api/storage';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
-			marginTop: '1em',
+			marginTop: '.6em',
+			marginBottom: '.6em',
 			width: '98%',
 		},
 		heading: {
@@ -53,6 +56,7 @@ const Request: React.FC<Props> = ({
 }): JSX.Element => {
 	const { request, fields } = requestObj;
 	const classes = useStyles();
+	const [isFavorite, setIsFavorite] = useState(PluginStorage.isFav(request));
 	const [params, setParams] = useState<RequestParam>(() => {
 		const state: RequestParam = {};
 		fields.forEach(({ name }) => {
@@ -159,6 +163,11 @@ const Request: React.FC<Props> = ({
 		addResponse(responseObj);
 	};
 
+	const addToFavorites = () => {
+		const { request } = requestObj;
+		setIsFavorite(PluginStorage.toggleFav(request));
+	};
+
 	return (
 		<div className={classes.root}>
 			<form onSubmit={sendRequest}>
@@ -189,7 +198,23 @@ const Request: React.FC<Props> = ({
 						id="panel1c-header"
 					>
 						<Typography component={'span'} className={classes.heading}>
-							{request}
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									alignItems: 'center',
+								}}
+							>
+								<StarRateIcon
+									onClick={(e) => {
+										e.stopPropagation();
+										e.preventDefault();
+										addToFavorites();
+									}}
+									style={{ color: isFavorite ? 'gold' : '#a1a1a1' }}
+								/>
+								{request}
+							</div>
 						</Typography>
 					</AccordionSummary>
 					<AccordionDetails className={classes.details}>

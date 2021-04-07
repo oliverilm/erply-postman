@@ -11,6 +11,9 @@ import { UserI } from '../@interfaces';
 import { UsersListContext } from '../context';
 import CreateIcon from '@material-ui/icons/Create';
 import ClearIcon from '@material-ui/icons/Clear';
+import { Table, Tbody, Td, Tr } from './custom/Table';
+import { jsonDisplay } from '../utils';
+
 interface UserDetailProps {
 	edit?: boolean;
 	user: UserI;
@@ -24,7 +27,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	edit = false,
 	user,
 }): JSX.Element => {
-	const { updateUser } = useContext(UsersListContext);
+	const { updateUser, deleteUser } = useContext(UsersListContext);
 	const [tempUser, setTempUser] = useState<UserI>({ ...user });
 	const [isEdit, setIsEdit] = useState(edit);
 
@@ -36,6 +39,8 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
+		console.log(e.target.value);
 		setTempUser(() => {
 			tempUser.username = e.target.value;
 			return { ...tempUser };
@@ -43,6 +48,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updatePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
 		setTempUser(() => {
 			tempUser.password = e.target.value;
 			return { ...tempUser };
@@ -50,6 +56,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const updateClientCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.persist();
 		setTempUser(() => {
 			tempUser.clientCode = e.target.value;
 			return { ...tempUser };
@@ -58,6 +65,11 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 
 	const handleClose = (): void => {
 		onClose && onClose();
+	};
+
+	const deleteThisUser = (): void => {
+		deleteUser(user);
+		handleClose();
 	};
 
 	return (
@@ -101,60 +113,85 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 				</div>
 			</DialogTitle>
 			<DialogContent>
-				<table>
-					<tbody>
-						<tr>
-							<td>username</td>
-							<td>
+				<Table>
+					<Tbody>
+						<Tr>
+							<Td>username</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										value={tempUser.username}
 										onChange={updateUsername}
 									/>
 								) : (
-									tempUser.username
+									<div>{tempUser.username}</div>
 								)}
-							</td>
-						</tr>
-						<tr>
-							<td>clientCode</td>
-							<td>
+							</Td>
+						</Tr>
+						<Tr>
+							<Td>clientCode</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										onChange={updateClientCode}
 										value={tempUser.clientCode}
 									/>
 								) : (
-									tempUser.clientCode
+									<div>{tempUser.clientCode}</div>
 								)}
-							</td>
-						</tr>
-						<tr>
-							<td>password</td>
-							<td>
+							</Td>
+						</Tr>
+						<Tr>
+							<Td>password</Td>
+							<Td>
 								{isEdit ? (
 									<TextField
 										onChange={updatePassword}
 										value={tempUser.password}
 									/>
 								) : (
-									tempUser.password
+									<div>{tempUser.password}</div>
 								)}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							</Td>
+						</Tr>
+					</Tbody>
+				</Table>
+				<pre
+					style={{ backgroundColor: '#fefefe' }}
+					dangerouslySetInnerHTML={{
+						__html: jsonDisplay.outputPretty(
+							JSON.stringify({
+								credentials: user.credentials,
+								endpoints: user.endpoints,
+							})
+						),
+					}}
+				></pre>
 			</DialogContent>
 			<DialogActions>
 				{isEdit ? (
-					<>
-						<Button onClick={handleClose} color="primary">
-							Cancel
-						</Button>
-						<Button onClick={update} color="primary">
-							Save
-						</Button>
-					</>
+					<div
+						style={{
+							width: '100%',
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+						}}
+					>
+						<div>
+							<Button onClick={deleteThisUser} color="primary">
+								Delete
+							</Button>
+						</div>
+						<div>
+							<Button onClick={handleClose} color="primary">
+								Cancel
+							</Button>
+							<Button onClick={update} color="primary">
+								Save
+							</Button>
+						</div>
+					</div>
 				) : (
 					<Button onClick={handleClose} color="primary">
 						Close

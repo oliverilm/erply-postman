@@ -3,7 +3,6 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
-	DialogContentText,
 	DialogActions,
 } from '@material-ui/core';
 import React, { useState, useContext } from 'react';
@@ -69,6 +68,7 @@ const ResponseHistory: React.FC<ResponseHistoryProps> = (): JSX.Element => {
 
 	const loadResponse = (response: ResponseI) => {
 		// load response to dashboard
+		// TODO: implement this
 		console.log(response);
 	};
 
@@ -120,19 +120,17 @@ const ResponseHistory: React.FC<ResponseHistoryProps> = (): JSX.Element => {
 					{'Previous request history'}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						<Table>
-							<thead>
-								<tr>
-									<Td>Request</Td>
-									<Td>clientCode</Td>
-									<Td>Status</Td>
-									<Td>Response</Td>
-								</tr>
-							</thead>
-							<tbody>{renderResponses()}</tbody>
-						</Table>
-					</DialogContentText>
+					<Table>
+						<thead>
+							<tr>
+								<Td>Request</Td>
+								<Td>clientCode</Td>
+								<Td>Status</Td>
+								<Td>Response</Td>
+							</tr>
+						</thead>
+						<tbody>{renderResponses()}</tbody>
+					</Table>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color="primary" autoFocus>

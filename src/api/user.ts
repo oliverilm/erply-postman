@@ -1,4 +1,4 @@
-import { UserI } from '../@interfaces';
+import { BaseRequestResponse, UserI } from '../@interfaces';
 import api from './index';
 
 export const defaultUser: UserI = {
@@ -37,7 +37,10 @@ export default class UserManager {
 		);
 	}
 
-	async login(): Promise<UserI> {
+	async login(): Promise<{
+		user: UserI;
+		response: BaseRequestResponse<unknown>;
+	}> {
 		const result = await api.verifyUser(this.user);
 		const serviceEndpoints = await api.getServiceEndpoints(this.user);
 
@@ -46,7 +49,7 @@ export default class UserManager {
 			this.user.lastLogin = +new Date() / 1000;
 			this.user.endpoints = serviceEndpoints.data.records[0];
 		}
-		return this.user;
+		return { user: this.user, response: result };
 	}
 
 	authEndTime(): Date | null {

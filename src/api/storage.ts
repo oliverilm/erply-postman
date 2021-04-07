@@ -1,9 +1,17 @@
 import { ResponseI, UserI } from '../@interfaces';
 
 class PluginStorage {
-	getUsers(): UserI[] {
-		const jsonString = localStorage.getItem('userList');
+	get(val: string) {
+		const jsonString = localStorage.getItem(val);
 		return jsonString ? JSON.parse(jsonString) : [];
+	}
+	set(name: string, val: unknown): void {
+		const json = JSON.stringify(val);
+		localStorage.setItem(name, json);
+	}
+
+	getUsers(): UserI[] {
+		return this.get('userList');
 	}
 
 	setUsers(userArr: UserI[]): void {
@@ -17,6 +25,33 @@ class PluginStorage {
 	getResponses(): ResponseI[] {
 		const jsonString = localStorage.getItem('responseList');
 		return jsonString ? JSON.parse(jsonString) : [];
+	}
+
+	getFavs(): string[] {
+		return this.get('FavRequests');
+	}
+
+	setFavs(favs: string[]): void {
+		this.set('FavRequests', favs);
+	}
+
+	addFav(fav: string): void {
+		const favs = this.getFavs();
+		this.setFavs([...favs, fav]);
+	}
+
+	toggleFav(fav: string): boolean {
+		const favs = this.getFavs();
+		if (favs.includes(fav)) {
+			this.setFavs(favs.filter((f) => f !== fav));
+			return false;
+		} else {
+			this.setFavs([...favs, fav]);
+			return true;
+		}
+	}
+	isFav(name: string): boolean {
+		return this.getFavs().includes(name);
 	}
 }
 
