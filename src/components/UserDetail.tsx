@@ -217,50 +217,6 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 						</TableRow>
 					</TableBody>
 				</Table>
-
-				{/* <Table>
-					<Tbody>
-						<Tr>
-							<Td>username</Td>
-							<Td>
-								{isEdit ? (
-									<TextField
-										value={tempUser.username}
-										onChange={updateUsername}
-									/>
-								) : (
-									<div>{tempUser.username}</div>
-								)}
-							</Td>
-						</Tr>
-						<Tr>
-							<Td>clientCode</Td>
-							<Td>
-								{isEdit ? (
-									<TextField
-										onChange={updateClientCode}
-										value={tempUser.clientCode}
-									/>
-								) : (
-									<div>{tempUser.clientCode}</div>
-								)}
-							</Td>
-						</Tr>
-						<Tr>
-							<Td>password</Td>
-							<Td>
-								{isEdit ? (
-									<TextField
-										onChange={updatePassword}
-										value={tempUser.password}
-									/>
-								) : (
-									<div>{tempUser.password}</div>
-								)}
-							</Td>
-						</Tr>
-					</Tbody>
-				</Table> */}
 				<pre
 					style={{ backgroundColor: '#fefefe' }}
 					dangerouslySetInnerHTML={{
