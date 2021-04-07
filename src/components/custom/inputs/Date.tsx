@@ -21,18 +21,18 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-const Date: React.FC<DateProps> = ({
+const DateInput: React.FC<DateProps> = ({
 	dateValue,
 	change,
 	format,
 }): JSX.Element => {
 	const classes = useStyles();
-
 	const [currentValue, setCurrentValue] = useState<Date | null>(dateValue);
 
 	const update = (value: string) => {
-		// const date: Date = new Date()
-		// setCurrentValue(date);
+		const date = new Date(value);
+		// TODO: format to correct format. ISO or timestamp ...
+		setCurrentValue(date);
 		change && change(value);
 	};
 
@@ -53,4 +53,4 @@ const Date: React.FC<DateProps> = ({
 	);
 };
 
-export default Date;
+export default DateInput;
