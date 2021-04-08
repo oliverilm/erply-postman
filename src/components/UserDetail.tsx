@@ -109,7 +109,21 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 						justifyContent: 'space-between',
 					}}
 				>
-					<div>{isEdit ? 'Update User' : 'User Detail'}</div>
+					<div>
+						{isEdit ? (
+							'Update User'
+						) : (
+							<div>
+								<div>User Detail</div>
+								<CreateIcon
+									style={{ cursor: 'pointer' }}
+									onClick={() => {
+										setIsEdit(true);
+									}}
+								/>
+							</div>
+						)}
+					</div>
 					<div>
 						{isEdit ? (
 							<div>
@@ -122,11 +136,9 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 							</div>
 						) : (
 							<div>
-								<CreateIcon
+								<ClearIcon
 									style={{ cursor: 'pointer' }}
-									onClick={() => {
-										setIsEdit(true);
-									}}
+									onClick={handleClose}
 								/>
 							</div>
 						)}

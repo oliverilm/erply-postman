@@ -23,7 +23,6 @@ const Text: React.FC<TextProps> = ({
 
 	return (
 		<TextField
-			id={`text-input-${label}`}
 			label={label}
 			margin="dense"
 			required={required}

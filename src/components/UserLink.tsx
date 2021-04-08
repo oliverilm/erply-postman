@@ -1,21 +1,11 @@
-import {
-	createStyles,
-	ListItem,
-	ListItemText,
-	makeStyles,
-	Theme,
-} from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import React, { useState, useEffect, useContext } from 'react';
 import { UserI } from '../@interfaces';
 import { ResponseContext, UsersListContext } from '../context/index';
 import './modalStyle.css';
 import UserManager from '../api/user';
-import { Divider, FormControl, Typography } from '@material-ui/core';
-import BlockIcon from '@material-ui/icons/Block';
-import { Button } from './custom/Button';
 import { generatePostmanProfile } from './requests/scripts/postman';
 import UserDetailModal from './UserDetail';
-import { v4 as uuidv4 } from 'uuid';
 import {
 	ContextMenu,
 	MenuItem as ContextMenuItem,
@@ -25,18 +15,6 @@ import {
 interface UserLinkProps {
 	user: UserI;
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-	createStyles({
-		root: {
-			width: '100%',
-			maxWidth: 360,
-		},
-		nested: {
-			paddingLeft: theme.spacing(4),
-		},
-	})
-);
 
 interface TimeI {
 	hours: number;
@@ -49,8 +27,6 @@ const attributes = {
 };
 
 export const UserLink: React.FC<UserLinkProps> = ({ user }): JSX.Element => {
-	const classes = useStyles();
-
 	const { clientCode, username, selected } = user;
 	const { setSelectedUser, updateUser } = useContext(UsersListContext);
 	const userManager = new UserManager(user);
@@ -59,6 +35,8 @@ export const UserLink: React.FC<UserLinkProps> = ({ user }): JSX.Element => {
 	const { addResponse, setIsLoading } = useContext(ResponseContext);
 
 	useEffect(() => {
+		setTimeTilEnd(timeUntilAuthEnd());
+
 		const interval = setInterval(() => {
 			setTimeTilEnd(timeUntilAuthEnd());
 		}, 1000);
@@ -123,61 +101,41 @@ export const UserLink: React.FC<UserLinkProps> = ({ user }): JSX.Element => {
 		<>
 			<ContextMenuTrigger id={`user-custom-context-${user.id}`}>
 				<ListItem
-					style={{ cursor: 'pointer' }}
+					style={{
+						cursor: 'pointer',
+					}}
 					divider
-					className={classes.nested}
+					className={`${selected ? 'selected' : 'user-group-item'}`}
 				>
-					<ListItemText
-						style={{ color: isAuthenticated() ? '##2ecc71' : '#ccc' }}
-						secondary={`${user.clientCode} - ${user.username} ${getAuthStr()}`}
-					/>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							width: '100%',
+							paddingBottom: '.5em',
+							paddingTop: '.5em',
+						}}
+					>
+						<div>
+							{clientCode} - {username}
+						</div>
+						<div>{getAuthStr()}</div>
+					</div>
 				</ListItem>
-				{/* <ListCard
-					className={`user-card ${selected ? 'selected' : ''}`}
-					onDoubleClick={selectUser}
-				>
-					<ListCardContent style={{ flex: 1, minHeight: '2em' }}>
-						<ListCardRow
-							style={{ alignItems: 'flex-start' }}
-							className={'user-card-detail'}
-						>
-							<div>
-								{clientCode} - {username}
-							</div>
-							<div>
-								{isAuthenticated() ? (
-									<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
-										timeTilEnd?.minutes
-									)}:${formatNr(timeTilEnd?.seconds)}`}</div>
-								) : (
-									<BlockIcon color="error" />
-								)}
-							</div>
-						</ListCardRow>
-					</ListCardContent>
-				</ListCard> */}
 			</ContextMenuTrigger>
 			<ContextMenu id={`user-custom-context-${user.id}`}>
-				<ContextMenuItem
-					data={{ action: 'copy' }}
-					onClick={login}
-					attributes={attributes}
-				>
+				<ContextMenuItem onClick={login} attributes={attributes}>
 					Authenticate
 				</ContextMenuItem>
 
 				<ContextMenuItem divider />
 
-				<ContextMenuItem
-					data={{ action: 'paste' }}
-					onClick={selectUser}
-					attributes={attributes}
-				>
+				<ContextMenuItem onClick={selectUser} attributes={attributes}>
 					Select User
 				</ContextMenuItem>
 
 				<ContextMenuItem
-					data={{ action: 'paste' }}
 					onClick={() => {
 						setIsViewOpen(true);
 					}}
@@ -187,7 +145,6 @@ export const UserLink: React.FC<UserLinkProps> = ({ user }): JSX.Element => {
 				</ContextMenuItem>
 				<ContextMenuItem divider />
 				<ContextMenuItem
-					data={{ action: 'delete' }}
 					onClick={() => {
 						generatePostmanProfile(user);
 					}}

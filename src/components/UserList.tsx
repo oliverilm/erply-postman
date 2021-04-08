@@ -1,201 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 import { UserI } from '../@interfaces';
-import { ResponseContext, UsersListContext } from '../context/index';
 import './modalStyle.css';
-import UserManager from '../api/user';
 import { Divider, FormControl, Typography } from '@material-ui/core';
-import BlockIcon from '@material-ui/icons/Block';
 import { Button } from './custom/Button';
-import { generatePostmanProfile } from './requests/scripts/postman';
-import UserDetailModal from './UserDetail';
 import { v4 as uuidv4 } from 'uuid';
-import {
-	ContextMenu,
-	MenuItem as ContextMenuItem,
-	ContextMenuTrigger,
-} from 'react-contextmenu';
 import UserGroups from './UserGroups';
-
-const ListCard = styled.div`
-	border-radius: 5px;
-	border: 1px solid #ccc;
-	margin: 0.3em 0.25em;
-	min-height: 2em;
-	width: 14em;
-`;
-
-const ListCardContent = styled.div`
-	padding: 0.5em;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-`;
-
-const ListCardRow = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	color: #c0c0c0;
-	font-size: 12px;
-`;
-
-interface ListItemProps {
-	user: UserI;
-}
-
-interface TimeI {
-	hours: number;
-	minutes: number;
-	seconds: number;
-}
-
-const attributes = {
-	className: 'custom-root',
-};
-
-const UserListItem: React.FC<ListItemProps> = ({ user }) => {
-	const { clientCode, username, selected } = user;
-	const { setSelectedUser, updateUser } = useContext(UsersListContext);
-	const userManager = new UserManager(user);
-	const [timeTilEnd, setTimeTilEnd] = useState<TimeI | null>(null);
-	const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
-	const { addResponse, setIsLoading } = useContext(ResponseContext);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setTimeTilEnd(timeUntilAuthEnd());
-		}, 1000);
-
-		return () => {
-			clearInterval(interval);
-		};
-	}, [user]);
-
-	const selectUser = () => {
-		setSelectedUser(user);
-	};
-
-	const isAuthenticated = () => {
-		return userManager.isAuthenticated();
-	};
-
-	const timeUntilAuthEnd = () => {
-		const endDate = userManager.authEndTime();
-		const currentDate = new Date();
-		if (endDate) {
-			const distance = endDate.getTime() - currentDate.getTime();
-			const hours = Math.floor(
-				(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-			);
-			const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-			const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-			return { hours, minutes, seconds };
-		}
-		return null;
-	};
-
-	const login = async () => {
-		setIsLoading(true);
-
-		const { user, response } = await userManager.login();
-		addResponse({
-			request: 'verifyUser',
-			response,
-			error: response.data.status.errorCode > 0,
-			user,
-			time: +new Date() / 1000,
-		});
-		updateUser(user);
-		setIsLoading(false);
-	};
-
-	const formatNr = (nr: number | undefined) => {
-		if (nr === undefined) return ' -- ';
-		return (nr ?? 0).toString().padStart(2, '0');
-	};
-
-	return (
-		<>
-			<ContextMenuTrigger id={`user-custom-context-${user.id}`}>
-				<ListCard
-					className={`user-card ${selected ? 'selected' : ''}`}
-					onDoubleClick={selectUser}
-				>
-					<ListCardContent style={{ flex: 1, minHeight: '2em' }}>
-						<ListCardRow
-							style={{ alignItems: 'flex-start' }}
-							className={'user-card-detail'}
-						>
-							<div>
-								{clientCode} - {username}
-							</div>
-							<div>
-								{isAuthenticated() ? (
-									<div>{`${formatNr(timeTilEnd?.hours)}:${formatNr(
-										timeTilEnd?.minutes
-									)}:${formatNr(timeTilEnd?.seconds)}`}</div>
-								) : (
-									<BlockIcon color="error" />
-								)}
-							</div>
-						</ListCardRow>
-					</ListCardContent>
-				</ListCard>
-			</ContextMenuTrigger>
-			<ContextMenu id={`user-custom-context-${user.id}`}>
-				<ContextMenuItem
-					data={{ action: 'copy' }}
-					onClick={login}
-					attributes={attributes}
-				>
-					Authenticate
-				</ContextMenuItem>
-
-				<ContextMenuItem divider />
-
-				<ContextMenuItem
-					data={{ action: 'paste' }}
-					onClick={selectUser}
-					attributes={attributes}
-				>
-					Select User
-				</ContextMenuItem>
-
-				<ContextMenuItem
-					data={{ action: 'paste' }}
-					onClick={() => {
-						setIsViewOpen(true);
-					}}
-					attributes={attributes}
-				>
-					User Details
-				</ContextMenuItem>
-				<ContextMenuItem divider />
-				<ContextMenuItem
-					data={{ action: 'delete' }}
-					onClick={() => {
-						generatePostmanProfile(user);
-					}}
-					attributes={attributes}
-				>
-					Postman Profile
-				</ContextMenuItem>
-			</ContextMenu>
-			<UserDetailModal
-				onClose={() => {
-					setIsViewOpen(false);
-				}}
-				open={isViewOpen}
-				user={user}
-			/>
-		</>
-	);
-};
+import { UsersListContext } from '../context';
 
 interface UserListProps {
 	userList: UserI[];
@@ -257,10 +70,10 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 
 		userList.forEach((user) => {
 			if (!user.company || user.company === '') {
-				if (groups.general) {
-					groups.general.push(user);
+				if (groups.General) {
+					groups.General.push(user);
 				} else {
-					groups.general = [user];
+					groups.General = [user];
 				}
 			} else {
 				if (groups[user.company]) {

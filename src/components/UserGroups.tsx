@@ -1,19 +1,20 @@
 import {
 	ListItem,
-	ListItemIcon,
 	ListItemText,
 	Collapse,
 	List,
 	createStyles,
 	makeStyles,
 	Theme,
+	Badge,
 	ListSubheader,
 } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { UserI } from '../@interfaces';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import { UserLink } from './UserLink';
+import { UsersListContext } from '../context';
 
 interface UserGroupsProps {
 	groups: { [key: string]: UserI[] };
@@ -22,6 +23,7 @@ interface UserGroupsProps {
 interface GroupProps {
 	name: string;
 	collection: UserI[];
+	includesSelected: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,9 +41,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Group: React.FC<GroupProps> = ({
 	name,
 	collection,
+	includesSelected,
 }): JSX.Element => {
 	const [open, setOpen] = useState(false);
-	const classes = useStyles();
 
 	const renderAccounts = () => {
 		return collection.map((user) => {
@@ -55,7 +57,11 @@ export const Group: React.FC<GroupProps> = ({
 	return (
 		<>
 			<ListItem button onClick={handleClick}>
-				<ListItemText primary={name} />
+				<ListItemText>
+					<Badge color="primary" variant="dot" invisible={!includesSelected}>
+						{name}
+					</Badge>
+				</ListItemText>
 				{open ? <ExpandLess /> : <ExpandMore />}
 			</ListItem>
 			<Collapse in={open} timeout="auto" unmountOnExit>
@@ -69,15 +75,40 @@ export const Group: React.FC<GroupProps> = ({
 
 const UserGroups: React.FC<UserGroupsProps> = ({ groups }): JSX.Element => {
 	const classes = useStyles();
+	const { usersList } = useContext(UsersListContext);
+	const selected = usersList.find((user) => user.selected);
+
+	const selectedIndicator = selected
+		? `${selected.clientCode} ${selected.username}`
+		: 'None';
 
 	const renderGroups = () => {
 		return Object.keys(groups).map((key) => {
 			const users: UserI[] = groups[key];
-			return <Group key={key} name={key} collection={users} />;
+
+			return (
+				<Group
+					key={key}
+					name={key}
+					includesSelected={selected !== undefined && users.includes(selected)}
+					collection={users}
+				/>
+			);
 		});
 	};
 
-	return <List className={classes.root}>{renderGroups()}</List>;
+	return (
+		<List
+			subheader={
+				<ListSubheader component="div" id="nested-list-subheader">
+					Selected: {selectedIndicator}
+				</ListSubheader>
+			}
+			className={classes.root}
+		>
+			{renderGroups()}
+		</List>
+	);
 };
 
 export default UserGroups;
