@@ -83,7 +83,6 @@ export const UserList: React.FC<UserListProps> = ({ userList }) => {
 				}
 			}
 		});
-		console.log(groups);
 		return groups;
 	};
 

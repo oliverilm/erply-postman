@@ -1,23 +1,66 @@
-# The ultimate boilerplate for VSCode maniacs
-
-### Just installed VSCode and want to develop react applications? I got you! DONWLOAD THIS NOW!
-
-### Download, open folder in vscode, install recommended extensions, yarn start and hit F5! You are debugging in vscode instantly!
-
-I should have called it `react-typescript-eslint-prettier-errorlens-es7snippets-chromedebug-vscode-styledcomponents-boilerplate` but couldn't, thats ok, thanks github!
-
-This is a Create React App ejected and version bumped to @latest as on 21-Jul, CRA was still on ESLint 6.x. Big Mad!
-
-This is geared for VSCode and has all project/extension specific settings included, such as
-
-1. TSConfig
-2. ESLint with TS plugins and the necessary `.eslintrc` config file
-3. Prettier Plugins and their corresponding `.prettierrc` file
-4. An `.env` file which tells the script to not open the link in default browser ~(>_<。)
-5. Launch configuration for VSCode, Install Chrome debugger extension and hit `F5` to start debugging immediately. If you have the [Browser Preview Extension](https://marketplace.visualstudio.com/items?itemName=auchenberg.vscode-browser-preview) you can use that with F5 as well.
-6. Extension specific settings already added in `settings.json`.
+# Erply Postman UI
 
 
+## Description
+This is an UI solution for Erply API endpoints, which also includes different predefined microservices.
+
+
+* User profiles and responses are stored in the localstorage
+
+## Tech
+* UI 
+    * React 
+    * Typescript 
+    * Styled components 
+    * Material ui
+* API - axios.
+
+
+## Usability
+
+1. Add a new user
+
+![adding a user image](https://i.imgur.com/mgtIKnO.png)
+* the added users will group together under the generic tab under the Profiles section.
+* the user gets automatically selected as "Selected user" and will be indicated with a green background.
+* Group will also be indicated (with a blue badge) that the selected user is in that group.
+
+![user group image](https://i.imgur.com/Q8RXBry.png) 
+---
+2. User actions
+
+![user actions image][https://i.imgur.com/EQEGblp.png]
+* pressing the right mouse button on a profile will present a custom menu with user specific actions.
+    * Authenticate: will perform verifyUser and getServiceEndpoints request to erply API and will store the result inside the user object.
+    * Select user: will select the current profile further requests.
+    * User Details: shows the profile details ( also edit profile )
+    * Postman Profile: will perform postmain profile export.
+
+---
+![user profile modal](https://i.imgur.com/in1Kvv5.png)
+* Profile details dialog will give you an overview of the current profiles data.
+* and the bottom of the dialog you can also see the profiles authentication data and service endpoints that will be saved after authentication process.
+* you can assign profile a company and it will be grouped together with other profiles from the same company.
+    * existing companies will be suggested to you for reference.
+ 
+---
+![user profile edit modal](https://i.imgur.com/4PWLUbf.png)
+* edit dialog will let you update user data.
+  
+---
+3. General usage
+![general usage](https://i.imgur.com/I9DRRvJ.png)
+* in order to use the rest of the application, a profile must be selected and authenticated. 
+* to verify the profiles authentication status, there is a timer to the rignt of any given profile, to indicate time remaining til the end of its session.
+
+![profle timer](https://i.imgur.com/MBtCu5D.png)
+
+* you can swich between different services on the top of the page
+* if a service is not available profile, it will render as disabled.
+
+---
+* just choose a request, fill in the required fields and press send request.
+* the response will be available on the right side of the page.
 
 ## 4 Simple Steps
 
@@ -30,14 +73,6 @@ This is geared for VSCode and has all project/extension specific settings includ
 
 4. `code .` from inside the project folder or `Open Folder` in VSCode
 
-
->## Wanna Bump before Build?
-
->Get [npm-check-updates](https://www.npmjs.com/package/npm-check-updates)
-
->Hit `ncu` to check for outdated packages, and if you are daring just do an `ncu -u` and then do your standard `yarn install` or `npm install`
-
------------------------
 
 ## Available Scripts
 

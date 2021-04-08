@@ -53,7 +53,6 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 
 	const updateUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.persist();
-		console.log(e.target.value);
 		setTempUser(() => {
 			tempUser.username = e.target.value;
 			return { ...tempUser };
@@ -77,6 +76,7 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 	};
 
 	const handleClose = (): void => {
+		setIsEdit(false);
 		onClose && onClose();
 	};
 
@@ -113,10 +113,10 @@ const UserDetailModal: React.FC<UserDetailProps> = ({
 						{isEdit ? (
 							'Update User'
 						) : (
-							<div>
+							<div style={{ display: 'flex', flexDirection: 'row' }}>
 								<div>User Detail</div>
 								<CreateIcon
-									style={{ cursor: 'pointer' }}
+									style={{ cursor: 'pointer', marginLeft: '1em' }}
 									onClick={() => {
 										setIsEdit(true);
 									}}
